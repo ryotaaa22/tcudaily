@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Global Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f6f9;
+        }
+        /* Sidebar */
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 250px;
+            height: 100%;
+            background-color: #4b34c3;
+            padding-top: 20px;
+            color: white;
+        }
+        .sidebar h2 {
+            text-align: center;
+            margin-bottom: 40px;
+            font-size: 28px;
+            font-weight: bold;
+            color: #ffffff;
+        }
+        .sidebar a {
+            display: block;
+            padding: 12px 20px;
+            color: white;
+            font-size: 16px;
+            text-decoration: none;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            border-radius: 5px;
+        }
+        .sidebar a i {
+            margin-right: 10px;
+        }
+        .sidebar a:hover {
+            background-color: #c50000;
+        }
+        /* Top Bar */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #fff;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin-left: 250px;
+            width: calc(100% - 250px);
+            position: fixed;
+            top: 0;
+            z-index: 1000;
+        }
+        .logo {
+            font-size: 24px;
+            color: #4b34c3;
+            font-weight: bold;
+        }
+        /* Main Content */
+        main {
+            padding: 80px 40px 40px 300px;
+            flex-grow: 1;
+            margin-top: 60px;
+        }
+        h2 {
+            font-size: 32px;
+            margin-bottom: 20px;
+            color: #000000;
+        }
+        .content-section {
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .content-section label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+        .content-editable {
+            width: 100%;
+            padding: 10px;
+            border-radius: 10px;
+            border: 1px solid #ddd;
+            margin-bottom: 20px;
+            min-height: 150px;
+            background-color: white;
+            overflow-y: auto;
+        }
+        .btn {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .btn:hover {
+            background-color: #0056b3;
+        }
+        /* Table Styles */
+        .post-table-container {
+            max-height: 200px;
+            overflow-y: auto;
+            margin-top: 20px;
+        }
+        .post-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .post-table th, .post-table td {
+            padding: 10px;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+        .post-table th {
+            background-color: #4b34c3;
+            color: white;
+        }
+        .post-item {
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+        .post-item:hover {
+            background-color: #f1f1f1;
+            transform: scale(1.02);
+        }
+        .selected {
+            background-color: #d1e7dd;
+            border-color: #007bff;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <h2>TCU Admin</h2>
+        <a href="/admin"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+        <a href="/manage_panel_admin"><i class="fas fa-users"></i> Manage Users</a>
+        <a href="/pending_panel_admin"><i class="fas fa-file-alt"></i> Pending Posts</a>
+        <a href="/create_admin"><i class="fas fa-user-plus"></i> Create Admin</a>
+        <a href="/admin_settings"><i class="fas fa-cogs"></i> Settings</a>
+        <a href="/logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+    </div>
+
+    <!-- Top Bar -->
+    <header>
+        <div class="logo">Admin Dashboard</div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <div class="content-section">
+            <h2>Manage Pending Posts</h2>
+    
+            <!-- Post Table -->
+            <label>Pending Posts:</label>
+            <div class="post-table-container">
+                <table class="post-table">
+                    <thead>
+                        <tr>
+                            <th>Post Title</th>
+                        </tr>
+                    </thead>
+                    <tbody id="postList">
+                        <!-- Posts will be dynamically inserted here -->
+                    </tbody>
+                </table>
+            </div>
+            <button type="button" id="loadContentBtn" class="btn">Load Content</button>
+    
+            <label for="content">Content:</label>
+            <div id="content" class="content-editable" contenteditable="true" disabled>
+                Select a post and load its content to view.
+            </div>
+    
+            <!-- Action Buttons -->
+            <button type="button" id="checkGrammarBtn" class="btn">Check Grammar</button>
+            <button type="button" id="editContentBtn" class="btn">Edit</button>
+            <button type="button" id="saveContentBtn" class="btn" style="display: none;">Save</button>
+        </div>
+    </main>
+    <script>
+       document.addEventListener("DOMContentLoaded", function () {
+    const postList = document.getElementById("postList");
+    const content = document.getElementById("content");
+    const loadContentBtn = document.getElementById("loadContentBtn");
+    const checkGrammarBtn = document.getElementById("checkGrammarBtn");
+    const editContentBtn = document.getElementById("editContentBtn");
+    const saveContentBtn = document.getElementById("saveContentBtn");
+
+    let selectedPostId = null; // Track the selected post ID
+
+    // Load pending posts
+    function loadPendingPosts() {
+        fetch("/api/pending-posts")
+            .then(response => response.json())
+            .then(posts => {
+                postList.innerHTML = "";
+                posts.forEach(post => {
+                    const tr = document.createElement("tr");
+                    tr.classList.add("post-item");
+                    tr.innerHTML = `<td>${post.title}</td>`;
+                    tr.dataset.id = post.id; // Store post ID in data attribute
+                    tr.addEventListener("click", function () {
+                        document.querySelectorAll('.post-item').forEach(item => item.classList.remove('selected'));
+                        tr.classList.add('selected');
+                        selectedPostId = post.id; // Save selected post ID
+                    });
+                    postList.appendChild(tr);
+                });
+            })
+            .catch(error => console.error("Error loading posts:", error));
+    }
+
+    // Load content of selected post
+    loadContentBtn.addEventListener("click", () => {
+        if (selectedPostId) {
+            fetch(`/api/post/${selectedPostId}`)
+                .then(response => response.json())
+                .then(data => {
+                    content.innerText = data.content;
+                    content.setAttribute("disabled", true); // Make content non-editable
+                })
+                .catch(error => {
+                    console.error("Error loading content:", error);
+                    alert("Failed to load content.");
+                });
+        } else {
+            alert("Please select a post.");
+        }
+    });
+
+    // Enable content editing
+    editContentBtn.addEventListener("click", () => {
+        if (selectedPostId) {
+            content.removeAttribute("disabled"); // Enable editing
+            saveContentBtn.style.display = "inline-block"; // Show Save button
+        } else {
+            alert("Please select a post to edit.");
+        }
+    });
+
+    // Save updated content
+    saveContentBtn.addEventListener("click", () => {
+        const updatedContent = content.innerText;
+
+        if (updatedContent.trim()) {
+            fetch(`/api/update-post/${selectedPostId}`, {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ content: updatedContent }),
+            })
+                .then(response => {
+                    if (response.ok) {
+                        alert("Content updated successfully.");
+                        content.setAttribute("disabled", true); // Make content non-editable
+                        saveContentBtn.style.display = "none"; // Hide Save button
+                    } else {
+                        throw new Error("Failed to update content.");
+                    }
+                })
+                .catch(error => {
+                    console.error("Error saving content:", error);
+                    alert("Failed to save content.");
+                });
+        } else {
+            alert("Content cannot be empty.");
+        }
+    });
+
+    // Grammar check
+    checkGrammarBtn.addEventListener("click", () => {
+        const contentText = content.innerText;
+        if (!contentText.trim()) {
+            alert("No content to check.");
+            return;
+        }
+
+        fetch("/api/check-grammar", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ text: contentText }),
+        })
+            .then(response => response.json())
+            .then(errors => console.log(errors)) // Replace with error display logic
+            .catch(error => console.error("Error checking grammar:", error));
+    });
+
+    // Load initial posts
+    loadPendingPosts();
+});
+
+    </script>
+
+</body>
+</html>

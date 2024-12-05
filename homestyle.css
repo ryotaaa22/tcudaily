@@ -1,0 +1,88 @@
+/* Reset default browser styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    height: 100%;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    background-image: url('C:/Users/User/Documents/Activities Will be deleted/1 Thesis Program/Pictures/BG.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+header {
+    background-color: rgba(255, 71, 76, 1);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 20px;
+    height: 58px;
+    flex-shrink: 0;
+}
+
+header h1 {
+    margin: 0;
+}
+
+header nav ul {
+    list-style: none;
+    display: flex;
+}
+
+header nav ul li {
+    margin: 0 10px;
+}
+
+header nav ul li a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+header nav ul li a:hover {
+    text-decoration: underline;
+}
+
+.welcome-message {
+    text-align: right;
+    padding: 5%;
+    font-size: 13px;
+    font-weight: bold;
+}
+
+.welcome-message a {
+    color: white;
+    text-decoration: none;
+}
+
+.welcome-message a:hover {
+    text-decoration: underline;
+}
+
+main {
+    flex: 1;
+    padding: 200px;
+    text-align: center;
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 10px;
+    max-width: 800px;
+    margin: 20px auto;
+}
+
+footer {
+    background-color: rgba(255, 71, 76, 1);
+    color: white;
+    text-align: center;
+    padding: 10px 0;
+    flex-shrink: 0;
+}

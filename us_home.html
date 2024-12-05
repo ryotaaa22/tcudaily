@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Home - TCU Online Publication</title>
+    
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
+    <!-- Combined Styles -->
+    <style>
+        /* Reset and Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+
+        /* Header Styles */
+        header {
+            background-color: #ff474c;
+            color: rgb(0, 0, 0);
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between; /* Space between elements */
+            align-items: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            position: relative; /* Positioning for the hamburger menu */
+        }
+
+        header h1 {
+            font-size: 1.8em;
+            margin-right: auto; /* Allow the title to push other elements */
+        }
+
+        nav {
+            display: flex;
+            align-items: center; /* Center links and search bar vertically */
+            flex-grow: 1; /* Allow nav to grow and take up space */
+            justify-content: center; /* Center the content within the nav */
+        }
+
+        header nav ul {
+            list-style: none;
+            display: flex;
+            gap: 15px;
+            align-items: center; /* Center links vertically */
+        }
+
+        header nav a {
+            color: rgb(7, 0, 0);
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.3s ease;
+        }
+
+        header nav a:hover {
+            color: #ffd1d1;
+        }
+
+        /* Search Input Styling */
+        .search-container {
+            display: flex;
+            align-items: center; /* Center the search input vertically */
+            margin-left: 20px;
+        }
+
+        .search-container input[type="text"] {
+            padding: 8px;
+            border: 1px solid #fff;
+            border-radius: 20px;
+            outline: none;
+            font-size: 14px;
+            background-color: white;
+            color: #333;
+            transition: border-color 0.3s ease;
+        }
+
+        .search-container input[type="text"]::placeholder {
+            color: #bbb;
+        }
+
+        .search-container input[type="text"]:focus {
+            border-color: #ff474c;
+        }
+
+        /* Hamburger Menu */
+        .lines {
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            position: absolute;
+            right: 20px; /* Position to the right */
+        }
+
+        .line {
+            width: 30px;
+            height: 3px;
+            background-color: white;
+            border-radius: 5px; /* Rounded lines */
+        }
+
+        /* Side Panel Styles */
+        #side-panel {
+            display: none; /* Hidden by default */
+            position: fixed;
+            right: 0;
+            top: 0;
+            width: 250px;
+            height: 100%;
+            background-color: #ff474c;
+            padding: 20px;
+            box-shadow: -3px 0 6px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            color: white;
+            transition: transform 0.3s ease;
+        }
+
+        #side-panel h2 {
+            margin-bottom: 20px;
+            font-size: 1.5em;
+        }
+
+        #side-panel a {
+            color: white;
+            text-decoration: none;
+            font-size: 1.1em;
+            display: block;
+            margin-bottom: 15px;
+            transition: color 0.3s ease;
+        }
+
+        #side-panel a:hover {
+            color: #ffd1d1;
+        }
+
+        .exit-icon {
+            font-size: 1.8em;
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            cursor: pointer;
+        }
+
+        /* Main Content Styles */
+        .container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+            flex-grow: 1; /* Allow main content to grow */
+        }
+
+        h1 {
+            text-align: center;
+            color: #0f0f0f; /* Preferred color */
+            margin-bottom: 20px;
+            font-size: 2.5em; /* Increase size for better visibility */
+        }
+
+        .section {
+            margin: 20px 0;
+            padding: 20px;
+            border-radius: 10px;
+            background-color: #ffffff;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* Deeper shadow for better depth */
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .section h2 {
+            color: #FF4D4D; /* Preferred color */
+            font-size: 1.8em; /* Increase size for better visibility */
+            margin-bottom: 15px;
+            border-bottom: 2px solid #FF4D4D; /* Underline for emphasis */
+            padding-bottom: 5px; /* Space below the heading */
+        }
+
+        /* Posts Styles */
+        .posts .post {
+            margin: 15px 0;
+            padding: 15px;
+            border-radius: 8px; /* More rounded corners */
+            background-color: #f9f9f9;
+            cursor: pointer; /* Indicate that the post is clickable */
+            transition: transform 0.3s, box-shadow 0.3s; /* Add hover effect */
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Shadow effect */
+        }
+
+        .posts .post:hover {
+            transform: translateY(-5px); /* Slight lift on hover */
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2); /* Deepen shadow on hover */
+        }
+
+        .posts .post h3 {
+            margin: 0;
+            font-size: 1.6em; /* Increase title size */
+        }
+
+        .posts .post small {
+            display: block;
+            color: #666;
+            margin-top: 5px;
+        }
+
+        .posts .post-image {
+            max-height: 200px;
+            max-width: 100%; /* Full width */
+            height: auto;
+            margin-top: 10px;
+            border-radius: 5px;
+            object-fit: cover; /* Cover the image area */
+        }
+
+        .posts .post-video {
+            width: 100%;
+            max-height: 400px; /* Limit height */
+            margin-top: 10px;
+            border-radius: 5px;
+            display: none; /* Hidden by default */
+        }
+
+        /* Modal styles */
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed; /* Stay in place */
+            z-index: 1000; /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgba(0, 0, 0, 0.8); /* Black w/ opacity */
+            padding-top: 60px;
+            transition: opacity 0.3s; /* Fade in/out effect */
+        }
+
+        .modal-content {
+            background-color: #fff;
+            margin: 5% auto; /* 5% from the top and centered */
+            padding: 20px;
+            border: 1px solid #888;
+            width: 90%; /* Could be more or less, depending on screen size */
+            max-width: 800px; /* Limit the max width */
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3); /* Deeper shadow effect */
+            animation: slide-in 0.3s forwards; /* Slide-in animation */
+        }
+
+        @keyframes slide-in {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+        }
+
+        #modalTitle {
+            color: #FF4D4D; /* Title color */
+            margin: 0;
+            font-size: 1.8em; /* Increase modal title size */
+        }
+
+        .modal-image {
+            max-width: 100%; /* Responsive images */
+            height: auto;
+            margin: 10px 0;
+            border-radius: 5px; /* Rounded corners for modal images */
+        }
+
+        /* Footer Styles */
+        .footer {
+            background-color: #FF4D4D;
+            color: white;
+            text-align: center;
+            padding: 20px 0;
+            margin-top: 20px;
+        }
+
+        .footer p {
+            margin: 5px 0;
+        }
+
+        .footer a {
+            color: white;
+            text-decoration: underline;
+            margin: 0 5px;
+        }
+
+        /* Responsive Design */
+        @media screen and (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            header nav {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            header nav ul {
+                flex-direction: column;
+                gap: 10px;
+            }
+            .search-container {
+                margin-left: 0;
+                margin-top: 10px;
+                width: 100%;
+            }
+            .search-container input[type="text"] {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Header -->
+    <header>
+        <h1>TCU Online Publication</h1>
+        <nav>
+            <ul>
+                <li><a href="/us_home">Home</a></li>
+                <li><a href="/us_po">Articles</a></li>
+                <li><a href="/about_us">About Us</a></li>
+                <li><a href="/contact_us">Contact Us</a></li>
+            </ul>
+            <div class="search-container">
+                <input type="text" placeholder="Search..." aria-label="Search input">
+            </div>
+        </nav>
+        <div class="lines" onclick="toggleSidePanel()" aria-label="Toggle menu">
+            <div class="line"></div>
+            <div class="line"></div>
+            <div class="line"></div>
+        </div>
+    </header>
+
+    <!-- Side Panel -->
+    <div id="side-panel" role="dialog" aria-labelledby="menu-title" aria-hidden="true">
+        <div class="exit-icon" onclick="toggleSidePanel()" aria-label="Close menu">&#10005;</div>
+        <h2 id="menu-title">Menu</h2>
+        <a href="#">Profile</a>
+        <a href="#">Settings</a>
+        <a href="#">Log Out</a>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container">
+
+        <!-- News/Announcements Section -->
+        <div class="section" id="news-section">
+            <h2>News/Announcements</h2>
+            <div class="posts" id="news-posts"></div>
+        </div>
+
+        <!-- Articles Section -->
+        <div class="section" id="articles-section">
+            <h2>Articles</h2>
+            <div class="posts" id="article-posts"></div>
+        </div>
+
+        <!-- Journals Section -->
+        <div class="section" id="journals-section">
+            <h2>Journals</h2>
+            <div class="posts" id="journal-posts"></div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div id="postModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2 id="modalTitle"></h2>
+            <p id="modalContent"></p>
+            <small id="modalSection"></small>
+            <div id="modalImages"></div> <!-- Container for images -->
+            <video id="modalVideo" controls style="display:none; width:100%;"></video> <!-- Video element, hidden by default -->
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>&copy; 2024 TCU Online Publication. All rights reserved.</p>
+        <p><a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a></p>
+    </footer>
+
+    <!-- Scripts -->
+    <script>
+        // Function to toggle the side panel
+        function toggleSidePanel() {
+            const sidePanel = document.getElementById('side-panel');
+            const isVisible = sidePanel.style.display === 'block';
+            sidePanel.style.display = isVisible ? 'none' : 'block'; // Show or hide the side panel
+            sidePanel.setAttribute('aria-hidden', isVisible); // Update accessibility attribute
+        }
+
+        async function fetchPosts() {
+            try {
+                const response = await fetch('/api/posts');
+                if (!response.ok) {
+                    console.error('Error fetching posts:', response.statusText);
+                    return; // Early return on error
+                }
+
+                const posts = await response.json();
+                console.log('Posts:', posts);
+                // Separate posts by section
+                const newsPostsDiv = document.getElementById('news-posts');
+                const articlePostsDiv = document.getElementById('article-posts');
+                const journalPostsDiv = document.getElementById('journal-posts');
+
+                if (posts.length === 0) {
+                    newsPostsDiv.innerHTML = '<p>No posts available in News/Announcements.</p>';
+                    articlePostsDiv.innerHTML = '<p>No posts available in Articles.</p>';
+                    journalPostsDiv.innerHTML = '<p>No posts available in Journals.</p>';
+                } else {
+                    posts.forEach(post => {
+                        const postDiv = document.createElement('div');
+                        postDiv.classList.add('post');
+
+                        const images = post.images ? post.images.split(',').map(img => img.trim()) : [];
+                        const video = post.video ? post.video : null;
+
+                        postDiv.innerHTML = `
+                            <h3>${post.title}</h3>
+                            <p>${post.content}</p>
+                            <small>${post.section} | ${new Date(post.created_at).toLocaleString()}</small>
+                            ${images.map(img => `<img src="${img}" alt="Post Image" class="post-image">`).join('')}
+                            ${video ? `<video controls class="post-video"><source src="${video}" type="video/mp4">Your browser does not support the video tag.</video>` : ''}
+                        `;
+
+                        // Click event to open modal
+                        postDiv.onclick = () => {
+                            openModal(post.title, post.content, post.section, images, video);
+                        };
+
+                        // Append post to the corresponding section
+                        if (post.section === 'News/Announcement') {
+                            newsPostsDiv.appendChild(postDiv);
+                        } else if (post.section === 'Articles') {
+                            articlePostsDiv.appendChild(postDiv);
+                        } else if (post.section === 'Journals') {
+                            journalPostsDiv.appendChild(postDiv);
+                        }
+                    });
+                }
+            } catch (error) {
+                console.error('Error fetching posts:', error);
+            }
+        }
+
+        function openModal(title, content, section, images, video) {
+            document.getElementById('modalTitle').innerText = title;
+            document.getElementById('modalContent').innerText = content;
+            document.getElementById('modalSection').innerText = section;
+
+            const modalImages = document.getElementById('modalImages');
+            modalImages.innerHTML = ''; // Clear previous images
+            images.forEach(img => {
+                const imgElement = document.createElement('img');
+                imgElement.src = img;
+                imgElement.className = 'modal-image'; // Apply modal image class
+                modalImages.appendChild(imgElement);
+            });
+
+            const modalVideo = document.getElementById('modalVideo');
+            modalVideo.style.display = video ? 'block' : 'none'; // Show video if it exists
+            if (video) {
+                modalVideo.src = video; // Set video source
+            }
+
+            document.getElementById('postModal').style.display = 'block'; // Show modal
+        }
+
+        // Get the modal
+        const modal = document.getElementById("postModal");
+
+        // Get the <span> element that closes the modal
+        const span = document.getElementsByClassName("close")[0];
+
+        // When the user clicks on <span> (x), close the modal
+        span.onclick = function () {
+            modal.style.display = "none";
+            const modalVideo = document.getElementById('modalVideo');
+            modalVideo.pause(); // Pause the video when closing
+            modalVideo.src = ""; // Reset video source
+        }
+
+        // When the user clicks anywhere outside of the modal, close it
+        window.onclick = function (event) {
+            if (event.target === modal) {
+                modal.style.display = "none";
+                const modalVideo = document.getElementById('modalVideo');
+                modalVideo.pause(); // Pause the video when closing
+                modalVideo.src = ""; // Reset video source
+            }
+        }
+
+        // Fetch posts on page load
+        document.addEventListener('DOMContentLoaded', fetchPosts);
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Dashboard</title>
+    <link rel="stylesheet" href="/css/us_dash.css">
+</head>
+
+<body>
+    <div class="dashboard-container">
+        <aside class="sidebar">
+            <div class="profile-section">
+                <h3 id="user-name">User Name</h3>
+                <p id="user-email">user@example.com</p>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="/us_dash" class="active">Profile</a></li>
+                    <li><a href="/us_settings">Settings</a></li>
+                    <li><a href="/user_posting">Create Post</a></li>
+                    <li><a href="/">Go to Post</a></li>
+                    <li><a href="/logout">Logout</a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <header>
+                <h1>User Dashboard</h1>
+            </header>
+            
+            <section id="profile" class="content-section">
+                <h2>Profile</h2>
+                <div class="profile-info">
+                    <p><strong>Name:</strong> <span id="profile-name">User Name</span></p>
+                    <p><strong>Email:</strong> <span id="profile-email">user@example.com</span></p>
+                </div>
+            </section>
+
+            <!-- New Post History Section -->
+            <section id="post-history" class="content-section">
+                <h2>Post History</h2>
+                <div id="posts-list">
+                    <!-- User's post history will be displayed here -->
+                </div>
+            </section>
+        </main>
+    </div>
+    
+    <!-- Include script to fetch post history -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Function to fetch the logged-in user's information
+            function fetchUserInfo() {
+                fetch('/api/user_info')
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            const userNameElement = document.getElementById('user-name');
+                            const userEmailElement = document.getElementById('user-email');
+                            const profileNameElement = document.getElementById('profile-name');
+                            const profileEmailElement = document.getElementById('profile-email');
+        
+                            // Set the user information in the profile and header sections
+                            userNameElement.textContent = data.user.username;
+                            userEmailElement.textContent = data.user.email;
+                            profileNameElement.textContent = data.user.username;
+                            profileEmailElement.textContent = data.user.email;
+                        } else {
+                            console.error('Error fetching user info:', data.message);
+                        }
+                    })
+                    .catch(error => console.error('Error fetching user info:', error));
+            }
+    
+            // Function to fetch the user's post history
+            function fetchPostHistory() {
+                fetch('/api/user_posts/history')
+                    .then(response => response.json())
+                    .then(posts => {
+                        const postsList = document.getElementById('posts-list');
+                        postsList.innerHTML = '';  // Clear any existing content
+    
+                        if (posts.length === 0) {
+                            postsList.innerHTML = '<p>No posts found.</p>';
+                            return;
+                        }
+    
+                        posts.forEach(post => {
+                            const postElement = document.createElement('div');
+                            postElement.className = 'post-history-item';
+                            postElement.innerHTML = `
+                                <h3>${post.title}</h3>
+                                <p>${post.description}</p>
+                                <p>Status: <strong>${post.status}</strong></p>
+                                <p>Posted on: ${new Date(post.created_at).toLocaleDateString()}</p>
+                                <button class="delete-btn" data-post-id="${post.id}">Delete</button>`;
+    
+                            // Check if there are images
+                            if (post.file_path) {
+                                const images = post.file_path.split(','); // Assuming multiple images are comma-separated
+                                images.forEach(image => {
+                                    const imgElement = document.createElement('img');
+                                    imgElement.src = image;
+                                    imgElement.alt = 'Post Image';
+                                    imgElement.className = 'post-image'; // Optional: add a class for styling
+                                    postElement.appendChild(imgElement);
+                                });
+                            }
+    
+                            // Check if there is a video
+                            if (post.video_url) {
+                                const videoElement = document.createElement('video');
+                                videoElement.src = post.video_url;
+                                videoElement.controls = true; // Add controls for play/pause
+                                videoElement.className = 'post-video'; // Optional: add a class for styling
+                                postElement.appendChild(videoElement);
+                            }
+    
+                            // Add the post to the list
+                            postsList.appendChild(postElement);
+    
+                            // Add delete functionality
+                            const deleteButton = postElement.querySelector('.delete-btn');
+                            deleteButton.addEventListener('click', () => deletePost(post.id, postElement));
+                        });
+                    })
+                    .catch(error => console.error('Error fetching post history:', error));
+            }
+    
+            // Delete post function
+            function deletePost(postId, postElement) {
+                if (confirm("Are you sure you want to delete this post?")) {
+                    fetch(`/api/delete_post/${postId}`, { method: 'DELETE' })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                // Remove the post element from the page after successful deletion
+                                postElement.remove();
+                            } else {
+                                alert("Error deleting post.");
+                            }
+                        })
+                        .catch(error => console.error("Error:", error));
+                }
+            }          
+            // Call both functions when the page loads
+            fetchUserInfo();
+            fetchPostHistory();
+        });
+    </script>    
+</body>
+</html>

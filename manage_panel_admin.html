@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Manage Users</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f6f9;
+        }
+        /* Sidebar */
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 250px;
+            height: 100%;
+            background-color: #4b34c3;
+            padding-top: 20px;
+            color: white;
+        }
+        .sidebar h2 {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        .sidebar a {
+            display: block;
+            padding: 12px 20px;
+            color: white;
+            font-size: 16px;
+            text-decoration: none;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            border-radius: 5px;
+        }
+        .sidebar a i {
+            margin-right: 10px;
+        }
+        .sidebar a:hover {
+            background-color: #c50000;
+        }
+        /* Top Bar */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #fff;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin-left: 250px;
+            width: calc(100% - 250px);
+            position: fixed;
+            top: 0;
+            z-index: 1000;
+        }
+        .logo {
+            font-size: 24px;
+            color: #4b34c3;
+            font-weight: bold;
+        }
+        .user-actions .new-user-btn {
+            background-color: #1a73e8;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            margin-left: 15px;
+        }
+        /* Main Content */
+        main {
+            padding: 80px 40px 40px 300px;
+            flex-grow: 1;
+            margin-top: 60px;
+        }
+        h1 {
+            font-size: 32px;
+            margin-bottom: 20px;
+            color: #000000;
+            
+        }
+        .search-section {
+            margin-bottom: 20px;
+        }
+        .search-section input {
+            width: 100%;
+            padding: 10px;
+            border-radius: 10px;
+            border: 1px solid #ddd;
+        }
+        table {
+            width: 100%;
+            background-color: white;
+            border-collapse: collapse;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        table th, table td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        table th {
+            background-color: #be1414;
+            color: white;
+        }
+        .role {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 10px;
+            color: white;
+        }
+        .status {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 10px;
+            color: white;
+        }
+
+        .suspend-btn {
+            background-color: #FF4D4D; /* Red color for suspend */
+            color: #fff;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        
+        .suspend-btn:hover {
+            background-color: #D43535; /* Darker red on hover */
+        }
+        /* Activate Button - Green */
+        .activate-btn {
+            background-color: #4CAF50; /* Green */
+            color: #fff;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .activate-btn:hover {
+            background-color: #45A049; /* Darker green on hover */
+        }
+        
+        .delete-btn {
+            background-color: #333; /* Dark color for delete */
+            color: #fff;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-left: 8px; /* Adds space between buttons */
+            transition: background-color 0.3s ease;
+        }
+        
+        .delete-btn:hover {
+            background-color: #555; /* Lighter dark on hover */
+        }
+        
+
+        .role.admin { background-color: #ff7300; }
+        .role.user {background-color: #00796b; }
+        .role.writer { background-color: #5c6bc0; }
+        .role.reader { background-color: #8e24aa; }
+        .status.active { background-color: #43a047; }
+        .status.suspended { background-color: #e53935; }
+    </style>
+</head>
+<body>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <h2>TCU Online Pub</h2>
+        <a href="/admin"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+        <a href="/manage_panel_admin"><i class="fas fa-users"></i> Manage Users</a>
+        <a href="/pending_panel_admin"><i class="fas fa-file-alt"></i> Pending Posts</a>
+        <a href="/create_admin"><i class="fas fa-user-plus"></i> Create Admin</a>
+        <a href="/ad_po"><i class="fas fa-pencil-alt"></i> Admin Post News/Announcement</a>
+        <a href="/admin_manage_post"><i class="fas fa-edit"></i> Admin Manage Post</a>
+        <a href="/admin_settings"><i class="fas fa-cogs"></i> Settings</a>
+        <a href="/logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+    </div>
+
+    <!-- Top Bar -->
+    <header>
+        <div class="logo">Manage Users</div>
+        <div class="user-actions">
+        <a href="/signup" button class="new-user-btn">New user </button></a>
+        </div>
+    </header>
+    <!-- Main Content -->
+    <main>
+        <h2>Search</h2>
+        <div class="search-section">
+            <input type="text" placeholder="Search users by name or email" id="searchInput">
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Role</th>
+                    <th>Status</th> <!-- New Status Column -->
+                    <th>           </th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            
+            <tbody id="userTableBody">
+                <!-- User data will be populated here -->
+            </tbody>
+        </table>
+    </main>
+
+    <script>
+        // Fetch user data and display it
+        async function fetchUsers() {
+            const response = await fetch('/admin/manage_users');
+            const users = await response.json();
+            console.log(users); // Add this line to check the fetched data
+            const userTableBody = document.getElementById('userTableBody');
+            userTableBody.innerHTML = ''; // Clear the table body
+    
+            users.forEach(user => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${user.username}</td>
+                    <td>${user.email}</td>
+                    <td><span class="role ${user.role}">${user.role}</span></td>
+                    <td><span class="status ${user.status}">${user.status.charAt(0).toUpperCase() + user.status.slice(1)}</span></td> <!-- Status Column -->
+                    <td>
+                       <td>
+                             <button 
+                                     class="${user.status === 'active' ? 'suspend-btn' : 'activate-btn'}" 
+                                             onclick="toggleUserStatus(${user.id})">
+                                                 ${user.status === 'active' ? 'Suspend' : 'Activate'}
+                                                         </button>
+                                <button class="delete-btn" onclick="deleteUser(${user.id})">Delete</button>
+                        </td>
+                    </td>
+                `;
+                userTableBody.appendChild(row);
+            });
+        }
+        // Toggle user status
+        async function toggleUserStatus(id) {
+            try {
+            const response = await fetch(`/admin/toggle_user_status/${id}`, { method: 'POST' });
+            if (!response.ok) throw new Error('Failed to toggle user status');
+            fetchUsers(); // Refresh user list
+        } catch (error) {
+            console.error('Error toggling user status:', error);
+            alert('Failed to toggle user status. Please try again later.');
+            }
+        }
+
+        
+        
+    
+        // Suspend user
+        async function suspendUser(id) {
+            try {
+                const response = await fetch(`/admin/suspend_user/${id}`, { method: 'POST' });
+                if (!response.ok) throw new Error('Failed to suspend user');
+                fetchUsers(); // Refresh user list
+            } catch (error) {        
+                console.error('Error fetching users:', error);
+                alert('Failed to fetch users. Please try again later.');
+            }
+        }
+    
+        // Delete user
+        async function deleteUser(id) {
+            if (confirm("Are you sure you want to delete this user?")) { // Optional confirmation
+                try {
+                    const response = await fetch(`/delete_user/${id}`, { method: 'DELETE' });
+                    if (!response.ok) throw new Error('Failed to delete user');
+                    const data = await response.text(); // or response.json() if you return JSON
+                    alert(data); // Display success message
+                    fetchUsers(); // Refresh user list
+                } catch (error) {
+                    console.error('Error deleting user:', error);
+                    alert('Failed to delete user. Please try again later.');
+                }
+            }
+        }
+        
+        
+    
+        // Search functionality
+        document.getElementById('searchInput').addEventListener('input', (e) => {
+            const searchTerm = e.target.value.toLowerCase();
+            const rows = document.querySelectorAll('#userTableBody tr');
+    
+            rows.forEach(row => {
+                const username = row.cells[0].textContent.toLowerCase();
+                const email = row.cells[1].textContent.toLowerCase();
+                if (username.includes(searchTerm) || email.includes(searchTerm)) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        });
+    
+        // Initial fetch
+        fetchUsers();
+    </script>
+    
+</body>
+</html>

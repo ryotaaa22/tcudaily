@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enhanced TCU Online Publication</title>
+    <style>
+        /* Reset CSS */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+        }
+
+        header {
+            background-color: #FF4D4D;
+            color: white;
+            padding: 10px 0;
+            position: relative;
+        }
+
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        header h1 {
+            font-size: 32px;
+            font-weight: bold;
+            margin-right: 20px; /* Add space between title and nav */
+        }
+
+        nav {
+            margin-left: 20px;
+        }
+
+        nav ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        nav ul li {
+            display: inline-block;
+            margin: 0 10px;
+        }
+
+        nav ul li a {
+            text-decoration: none;
+            color: white;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        nav ul li a:hover {
+            text-decoration: underline;
+        }
+
+        .search-box {
+            display: flex;
+            justify-content: center;
+            align-items: center; /* Vertically aligns the input and button */
+        }
+
+        .search-box input[type="text"] {
+            padding: 10px;
+            border-radius: 20px;
+            border: 1px solid #ccc;
+            margin-right: 10px;
+        }
+
+        .search-box button {
+            padding: 10px 20px;
+            background-color: #0056b3;
+            border: none;
+            color: white;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .search-box button:hover {
+            background-color: #00408a;
+        }
+
+        .main-content {
+            display: flex;
+            justify-content: space-between;
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 0 20px;
+        }
+
+        .left-content {
+            width: 70%;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .right-content {
+            width: 25%;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .post-area input,
+        .post-area textarea {
+            width: 100%;
+            margin-bottom: 10px;
+            padding: 10px;
+            border-radius: 10px;
+            border: 1px solid #ccc;
+            resize: none;
+        }
+
+        .post-area input[type="file"] {
+            border: none;
+        }
+
+        .post-area button {
+            display: block;
+            margin-top: 10px;
+            padding: 10px 20px;
+            background-color: #FF4D4D;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .post-area button:hover {
+            background-color: #e04444;
+        }
+
+        .recent-posts ul li {
+            background-color: #e9ecef;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            position: relative; /* To position the buttons */
+            cursor: pointer; /* Change cursor to pointer */
+        }
+
+        .recent-posts ul li:hover {
+            background-color: #d3d3d3; /* Highlight on hover */
+        }
+
+        .right-content h2 {
+            font-size: 22px;
+            margin-bottom: 10px;
+        }
+
+        .right-content ul li a {
+            display: block;
+            background-color: #0056b3;
+            color: white;
+            padding: 12px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+            text-align: center;
+            transition: background-color 0.3s ease;
+        }
+
+        .right-content ul li a:hover {
+            background-color: #003d75;
+        }
+
+        footer {
+            background-color: #FF4D4D;
+            color: white;
+            text-align: center;
+            padding: 15px 0;
+            margin-top: 20px; /* Adjust margin for footer */
+        }
+
+        /* Responsive Design */
+        @media screen and (max-width: 768px) {
+            .main-content {
+                flex-direction: column;
+            }
+
+            .left-content, .right-content {
+                width: 100%;
+                margin-bottom: 20px;
+            }
+
+            .header-container {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            nav ul {
+                margin-top: 10px;
+            }
+        }
+
+        /* Hamburger Menu Styles */
+        .hamburger-icon {
+            display: none;
+            cursor: pointer;
+        }
+
+        .hamburger-menu {
+            display: none;
+            position: absolute;
+            top: 60px;
+            right: 20px;
+            background-color: #FF4D4D;
+            border-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+        }
+
+        .hamburger-menu ul {
+            list-style: none;
+            padding: 10px;
+        }
+
+        .hamburger-menu ul li {
+            margin: 5px 0;
+        }
+
+        .hamburger-menu ul li a {
+            color: white;
+            text-decoration: none;
+        }
+
+        .user-links {
+            position: relative;
+            display: inline-block; /* Allows the dropdown to position correctly */
+        }
+
+        .dropdown {
+            position: relative;
+            display: inline-block;
+            margin-left: 10px; /* Add space between search and dropdown */
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            right: 0;
+            background-color: #FF4D4D;
+            min-width: 160px;
+            z-index: 1;
+            border-radius: 5px;
+        }
+
+        .dropdown-content a {
+            color: white;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+        }
+
+        .dropdown-content a:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .dropdown.active .dropdown-content {
+            display: block;
+        }
+
+        .dropdown-toggle {
+            cursor: pointer; /* Change the cursor to pointer for the dropdown toggle */
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed; /* Stay in place */
+            z-index: 1000; /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgb(0,0,0); /* Fallback color */
+            background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+            padding-top: 60px;
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto; /* 15% from the top and centered */
+            padding: 20px;
+            border: 1px solid #888;
+            width: 50%; /* Could be more or less, depending on screen size */
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        /* Edit Modal Enhancements */
+        #edit-modal {
+            display: none; /* Hidden by default */
+        }
+
+        .modal-header {
+            margin-bottom: 20px;
+            border-bottom: 2px solid #FF4D4D; /* Accent line */
+            padding-bottom: 10px;
+        }
+
+        .modal-header h2 {
+            font-size: 24px;
+            color: #333;
+        }
+
+        .modal-content input,
+        .modal-content textarea {
+            border: 1px solid #FF4D4D; /* Accent border */
+            padding: 10px;
+            margin-bottom: 15px;
+            border-radius: 5px;
+            transition: border-color 0.3s;
+        }
+
+        .modal-content input:focus,
+        .modal-content textarea:focus {
+            border-color: #0056b3; /* Change border color on focus */
+            outline: none;
+        }
+
+        .modal-content button {
+            background-color: #FF4D4D;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            display: block;
+            margin: 0 auto; /* Center button */
+        }
+
+        .modal-content button:hover {
+            background-color: #e04444;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-container">
+            <h1>TCU Online Publication</h1>
+            <div class="search-box">
+                <input type="text" placeholder="Search..." />
+                <button>Search</button>
+                <nav>
+                    <ul>
+                        <li><a href="/user">Home</a></li>
+                        <li><a href="/article_user">Articles</a></li>
+                        <li><a href="/about_us">About Us</a></li>
+                        <li><a href="/contact_us">Contact Us</a></li>
+                    </ul>
+                </nav>
+            </div>
+            <div class="user-links">
+                <div class="dropdown">
+                    <span class="dropdown-toggle" onclick="toggleDropdown(event)">☰</span>
+                    <div class="dropdown-content">
+                        <a href="#">Dashboard</a>
+                        <a href="#">Settings</a>
+                        <a href="/logout">Logout</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="main-content">
+        <div class="left-content">
+            <div class="post-area">
+                <h2>Create Post</h2>
+                <input type="text" id="post-title" placeholder="Post Title" required>
+                <textarea id="post-content" rows="4" placeholder="Post content" required></textarea><br>
+                <input type="file" id="post-file" accept="image/*, .pdf"><br>
+                <button onclick="createPost()">Post</button>
+            </div>
+            <div class="recent-posts">
+                <h2>Recent Posts</h2>
+                <ul id="recent-posts-list">
+                    <li>No posts yet...</li>
+                </ul>
+            </div>
+        </div>
+        <div class="right-content">
+            <h2>Pinned Posts</h2>
+            <ul id="pin-posts-list">
+                <li>No pinned posts yet...</li>
+            </ul>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 TCU Online Publication</p>
+    </footer>
+
+    <!-- Modal for Viewing Post -->
+    <div id="post-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2 id="modal-post-title"></h2>
+            <p id="modal-post-content"></p>
+            <img id="modal-post-image" src="" alt="" style="max-width:100%; display:none;">
+            <a id="modal-post-file" href="" download style="display:none;">Download File</a>
+            <button id="edit-button" class="edit" style="margin-top: 10px;" onclick="openEditModal()">Edit Post</button>
+            <button id="delete-button" class="delete" style="margin-top: 10px;" onclick="deleteCurrentPost()">Delete Post</button>
+        </div>
+    </div>
+
+    <!-- Modal for Editing Post -->
+    <div id="edit-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeEditModal()">&times;</span>
+            <div class="modal-header">
+                <h2>Edit Post</h2>
+            </div>
+            <input type="text" id="edit-post-title" placeholder="Post Title" required>
+            <textarea id="edit-post-content" rows="4" placeholder="Post content" required></textarea><br>
+            <input type="file" id="edit-post-file" accept="image/*, .pdf"><br>
+            <button onclick="saveEditPost()">Save Changes</button>
+        </div>
+    </div>
+
+    <script>
+        let posts = [];
+        let currentEditIndex = null;
+
+        function createPost() {
+            const title = document.getElementById('post-title').value.trim();
+            const content = document.getElementById('post-content').value.trim();
+            const fileInput = document.getElementById('post-file');
+            const file = fileInput.files[0];
+
+            if (title && content) {
+                if (currentEditIndex !== null) {
+                    // Update existing post
+                    posts[currentEditIndex] = { title, content, file };
+                    currentEditIndex = null;
+                } else {
+                    // Create new post
+                    posts.push({ title, content, file });
+                }
+
+                displayPosts();
+                clearForm();
+            } else {
+                alert('Please fill out both title and content fields.');
+            }
+        }
+
+        function displayPosts() {
+            const recentPostsList = document.getElementById('recent-posts-list');
+            recentPostsList.innerHTML = '';
+
+            if (posts.length === 0) {
+                recentPostsList.innerHTML = '<li>No posts yet...</li>';
+                return;
+            }
+
+            posts.forEach((post, index) => {
+                let postHTML = `
+                    <li onclick="openModal(${index})">
+                        ${post.title}
+                    </li>`;
+                recentPostsList.innerHTML += postHTML;
+            });
+        }
+
+        function openModal(index) {
+            currentEditIndex = index; // Set the current edit index
+            const post = posts[index];
+            document.getElementById('modal-post-title').innerText = post.title;
+            document.getElementById('modal-post-content').innerText = post.content;
+
+            const modalImage = document.getElementById('modal-post-image');
+            const modalFileLink = document.getElementById('modal-post-file');
+
+            if (post.file) {
+                const fileURL = URL.createObjectURL(post.file);
+                if (post.file.type.startsWith('image/')) {
+                    modalImage.src = fileURL;
+                    modalImage.style.display = 'block'; // Show the image
+                    modalFileLink.style.display = 'none'; // Hide the download link
+                } else {
+                    modalImage.style.display = 'none'; // Hide the image
+                    modalFileLink.href = fileURL;
+                    modalFileLink.style.display = 'block'; // Show the download link
+                    modalFileLink.innerText = `Download ${post.file.name}`;
+                }
+            } else {
+                modalImage.style.display = 'none'; // Hide the image
+                modalFileLink.style.display = 'none'; // Hide the download link
+            }
+
+            const modal = document.getElementById('post-modal');
+            modal.style.display = 'block'; // Show the modal
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('post-modal');
+            modal.style.display = 'none'; // Hide the modal
+        }
+
+        function openEditModal() {
+            if (currentEditIndex !== null) {
+                const post = posts[currentEditIndex];
+                document.getElementById('edit-post-title').value = post.title;
+                document.getElementById('edit-post-content').value = post.content;
+                document.getElementById('edit-post-file').value = ''; // Reset file input
+                const editModal = document.getElementById('edit-modal');
+                editModal.style.display = 'block'; // Show the edit modal
+                closeModal(); // Close the view modal
+            }
+        }
+
+        function closeEditModal() {
+            const editModal = document.getElementById('edit-modal');
+            editModal.style.display = 'none'; // Hide the edit modal
+        }
+
+        function saveEditPost() {
+            if (currentEditIndex !== null) {
+                const title = document.getElementById('edit-post-title').value.trim();
+                const content = document.getElementById('edit-post-content').value.trim();
+                const fileInput = document.getElementById('edit-post-file');
+                const file = fileInput.files[0];
+
+                if (title && content) {
+                    posts[currentEditIndex] = { title, content, file };
+                    displayPosts();
+                    closeEditModal(); // Close the edit modal after saving
+                } else {
+                    alert('Please fill out both title and content fields.');
+                }
+            }
+        }
+
+        function deleteCurrentPost() {
+            if (currentEditIndex !== null) {
+                deletePost(currentEditIndex);
+                closeModal(); // Close modal after deletion
+            }
+        }
+
+        function deletePost(index) {
+            if (confirm('Are you sure you want to delete this post?')) {
+                posts.splice(index, 1);
+                displayPosts();
+            }
+        }
+
+        function clearForm() {
+            document.getElementById('post-title').value = '';
+            document.getElementById('post-content').value = '';
+            document.getElementById('post-file').value = '';
+        }
+
+        function toggleDropdown(event) {
+            const dropdown = event.currentTarget;
+            dropdown.classList.toggle('active'); // Toggle the active class to show/hide the dropdown
+        }
+
+        window.onclick = function(event) {
+            if (!event.target.matches('.dropdown-toggle')) {
+                const dropdowns = document.getElementsByClassName("dropdown-content");
+                for (let i = 0; i < dropdowns.length; i++) {
+                    dropdowns[i].style.display = "none"; // Hide all dropdowns
+                }
+            }
+        }
+
+        // Close modals when clicking outside of them
+        window.onclick = function(event) {
+            const modal = document.getElementById('post-modal');
+            const editModal = document.getElementById('edit-modal');
+            if (event.target === modal) {
+                modal.style.display = "none"; // Close the view post modal
+            }
+            if (event.target === editModal) {
+                editModal.style.display = "none"; // Close the edit post modal
+            }
+        }
+    </script>
+</body>
+</html>

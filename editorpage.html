@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Content Editor</title>
+    <link rel="stylesheet" href="/css/editorpage.css">
+</head>
+<body>
+    <div class="editor-container">
+        <h1>Content Editor</h1>
+        <textarea id="editor" placeholder="Edit your content here..."></textarea>
+        <div class="buttons">
+            <button id="preview-btn">Preview</button>
+            <button id="save-btn">Save</button>
+        </div>
+        <div id="preview" class="preview-box"></div>
+    </div>
+    <script>
+
+document.addEventListener("DOMContentLoaded", () => {
+    const editor = document.getElementById("editor");
+    const preview = document.getElementById("preview");
+    const previewBtn = document.getElementById("preview-btn");
+    const saveBtn = document.getElementById("save-btn");
+
+    // Preview button functionality
+    previewBtn.addEventListener("click", () => {
+        const content = editor.value;
+        preview.innerHTML = content; // Render the content as HTML
+    });
+
+    // Save button functionality
+    saveBtn.addEventListener("click", () => {
+        const content = editor.value;
+        localStorage.setItem("savedContent", content);
+        alert("Content saved successfully!");
+    });
+
+    // Load saved content on page load
+    const savedContent = localStorage.getItem("savedContent");
+    if (savedContent) {
+        editor.value = savedContent;
+        preview.innerHTML = savedContent;
+    }
+});
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Manage Posts</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+         * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f6f9;
+        }
+        /* Sidebar */
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 250px;
+            height: 100%;
+            background-color: #4b34c3;
+            padding-top: 20px;
+            color: white;
+        }
+        .sidebar h2 {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        .sidebar a {
+            display: block;
+            padding: 12px 20px;
+            color: white;
+            font-size: 16px;
+            text-decoration: none;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            border-radius: 5px;
+        }
+        .sidebar a i {
+            margin-right: 10px;
+        }
+        .sidebar a:hover {
+            background-color: #c50000;
+        }
+        /* Top Bar */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #fff;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin-left: 250px;
+            width: calc(100% - 250px);
+            position: fixed;
+            top: 0;
+            z-index: 1000;
+        }
+        .logo {
+            font-size: 24px;
+            color: #4b34c3;
+            font-weight: bold;
+        }
+        .user-actions .new-user-btn {
+            background-color: #1a73e8;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            margin-left: 15px;
+        }
+        /* Main Content */
+        main {
+            padding: 80px 40px 40px 300px;
+            flex-grow: 1;
+            margin-top: 60px;
+        }
+        h2 {
+            font-size: 32px;
+            margin-bottom: 20px;
+            color: #ffffff;
+        }
+        .search-section {
+            margin-bottom: 20px;
+        }
+        .search-section input {
+            width: 100%;
+            padding: 10px;
+            border-radius: 10px;
+            border: 1px solid #ddd;
+        }
+        table {
+            width: 100%;
+            background-color: white;
+            border-collapse: collapse;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+            margin-top: 20px;
+        }
+        table th, table td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        table th {
+            background-color: #be1414;
+            color: white;
+            font-weight: bold;
+        }
+        table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        table tr:hover {
+            background-color: #f1f1f1;
+        }
+        table td:last-child {
+            text-align: center;
+        }
+
+        /* Modal Styles */
+        .modal, .view-modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.4);
+        }
+
+        .modal-content, .view-modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 500px;
+            border-radius: 5px;
+        }
+
+        .close, .view-close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover, .close:focus, .view-close:hover, .view-close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .remove-button{
+            background-color: #ff4d4d;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+
+        .remove-button:hover, .modal-button:hover {
+            background-color: #e60000;
+            transform: scale(1.05);
+        }
+
+        .modal-button {
+            margin-right: 10px; /* Add space between the buttons */
+        }
+
+        .modal-button {
+            background-color: #ffc14d;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+
+  /* Pagination container */
+.pagination-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+}
+
+/* Pagination button styles */
+.pagination-container button {
+    padding: 10px 20px;
+    margin: 0 15px;
+    border: 2px solid #4b34c3;
+    background-color: #fff;
+    color: #4b34c3;
+    font-weight: 600;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.pagination-container button:hover {
+    background-color: #4b34c3;
+    color: white;
+    border-color: #4b34c3;
+}
+
+.pagination-container button:disabled {
+    background-color: #f0f0f0;
+    color: #ccc;
+    cursor: not-allowed;
+    border: 2px solid #ddd;
+}
+
+/* Current page display */
+.pagination-container .pagination-current {
+    font-size: 18px;
+    font-weight: 600;
+    color: #4b34c3;
+}
+
+
+    </style>
+</head>
+<body>
+
+   
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <h2>TCU Online Pub</h2>
+        <a href="/admin"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+        <a href="/manage_panel_admin"><i class="fas fa-users"></i> Manage Users</a>
+        <a href="/pending_panel_admin"><i class="fas fa-file-alt"></i> Pending Posts</a>
+        <a href="/create_admin"><i class="fas fa-user-plus"></i> Create Admin</a>
+        <a href="/ad_po"><i class="fas fa-pencil-alt"></i> Admin Post News/Announcement</a>
+        <a href="/admin_manage_post"><i class="fas fa-edit"></i> Admin Manage Post</a>
+        <a href="/ad_checker"><i class="fas fa-check-circle"></i> Plagiarism Checker</a>
+        <a href="/admin_settings"><i class="fas fa-cogs"></i> Settings</a>
+        <a href="/logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+    </div>
+
+    <!-- Top Bar -->
+    <header>
+        <div class="logo">Manage Posts</div>
+        <div class="user-actions">
+            <button class="new-user-btn">New Post</button>
+        </div>
+    </header>
+    
+    <!-- Main Content -->
+    <main>
+        <h3>Search</h3>
+        <div class="search-section">
+            <input type="text" placeholder="Search posts by title or content" id="searchInput" onkeyup="searchPosts()">
+        </div>
+        <table id="posts-table">
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Content</th>
+                    <th>Section</th>
+                    <th>Date Created</th>
+                    <th>Time Created</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="posts-tbody">
+                <!-- Dynamic content will be populated here -->
+            </tbody>
+        </table>
+    </main>
+
+    <div class="pagination-container">
+        <button class="pagination-prev" id="prevBtn" onclick="changePage(currentPage - 1)">Previous</button>
+        <span class="pagination-current" id="currentPage"></span>
+        <button class="pagination-next" id="nextBtn" onclick="changePage(currentPage + 1)">Next</button>
+    </div>
+    
+
+
+    <!-- Modal for Viewing Post -->
+    <div id="viewModal" class="view-modal">
+        <div class="view-modal-content">
+            <span class="view-close" onclick="closeViewModal()">&times;</span>
+            <h1><u>Post Details</u></h1>
+            <div id="viewPostContent"></div>
+        </div>
+    </div>
+
+    <!-- Modal for Confirming Removal -->
+    <div id="removeModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2>Confirm Removal</h2>
+            <p>Are you sure you want to remove this post?</p>
+            <button class="modal-button" onclick="confirmRemovePost()">Yes, Remove</button>
+            <button class="modal-button" onclick="closeModal()">Cancel</button>
+        </div>
+    </div>
+
+    <script>
+       let postsData = []; // Store the fetched posts data
+let postToRemoveId = null; // Store the ID of the post to remove
+let currentPage = 1;
+const postsPerPage = 10;
+
+async function fetchPosts() {
+    const response = await fetch('/api/posts'); // Adjust the endpoint as necessary
+    if (!response.ok) {
+        console.error('Error fetching posts:', response.statusText);
+        return;
+    }
+
+    postsData = await response.json(); // Store posts data for searching
+    displayPaginatedPosts(); // Display posts with pagination
+}
+
+function displayPaginatedPosts() {
+    const start = (currentPage - 1) * postsPerPage;
+    const paginatedPosts = postsData.slice(start, start + postsPerPage);
+
+    displayPosts(paginatedPosts);
+    renderPagination(postsData.length);
+}
+
+function displayPosts(posts) {
+    const postsTbody = document.getElementById('posts-tbody');
+    postsTbody.innerHTML = ''; // Clear previous entries
+
+    if (posts.length === 0) {
+        postsTbody.innerHTML = '<tr><td colspan="6">No posts available.</td></tr>';
+    } else {
+        posts.forEach(post => {
+            const createdAt = new Date(post.created_at);
+            const date = createdAt.toLocaleDateString(); // Extract date
+            const time = createdAt.toLocaleTimeString(); // Extract time
+
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${post.title}</td>
+                <td>${post.content}</td>
+                <td>${post.section}</td>
+                <td>${date}</td>
+                <td>${time}</td>
+                <td>
+                    <button class="remove-button" onclick="openModal(${post.id})">Remove</button>
+                    <button class="modal-button" onclick="viewPost(${post.id})">View</button>
+                </td>
+            `;
+            postsTbody.appendChild(row);
+        });
+    }
+}
+
+function searchPosts() {
+    const searchInput = document.getElementById('searchInput').value.toLowerCase();
+    const filteredPosts = postsData.filter(post => 
+        post.title.toLowerCase().includes(searchInput) || 
+        post.content.toLowerCase().includes(searchInput)
+    );
+    displayPosts(filteredPosts);
+    renderPagination(filteredPosts.length);
+}
+
+function renderPagination(totalPosts) {
+    const pagination = document.getElementById('pagination');
+    pagination.innerHTML = ''; // Clear previous pagination controls
+
+    const totalPages = Math.ceil(totalPosts / postsPerPage);
+
+    // Create Previous button
+    const prevButton = document.createElement('button');
+    prevButton.textContent = 'Previous';
+    prevButton.disabled = currentPage === 1; // Disable on first page
+    prevButton.onclick = () => changePage(currentPage - 1);
+    pagination.appendChild(prevButton);
+
+    // Create page number buttons
+    for (let i = 1; i <= totalPages; i++) {
+        const pageButton = document.createElement('button');
+        pageButton.textContent = i;
+        pageButton.classList.toggle('active', i === currentPage);
+        pageButton.onclick = () => changePage(i);
+        pagination.appendChild(pageButton);
+    }
+
+    // Create Next button
+    const nextButton = document.createElement('button');
+    nextButton.textContent = 'Next';
+    nextButton.disabled = currentPage === totalPages; // Disable on last page
+    nextButton.onclick = () => changePage(currentPage + 1);
+    pagination.appendChild(nextButton);
+}
+
+function changePage(page) {
+    if (page < 1 || page > Math.ceil(postsData.length / postsPerPage)) return; // Prevent invalid page numbers
+    currentPage = page;
+    displayPaginatedPosts();
+}
+
+// Open the modal to view post content
+function viewPost(postId) {
+    const post = postsData.find(p => p.id === postId);
+    const content = post.content;
+
+    // Insert the content into the modal and display it
+    document.getElementById('viewPostContent').innerHTML = content;
+    document.getElementById('viewModal').style.display = 'block';
+}
+
+// Close the view modal
+function closeViewModal() {
+    document.getElementById('viewModal').style.display = 'none';
+}
+
+// Open Modal for Removing Post
+function openModal(postId) {
+    postToRemoveId = postId;
+    document.getElementById('removeModal').style.display = 'block';
+}
+
+// Close the modal for Removing Post
+function closeModal() {
+    document.getElementById('removeModal').style.display = 'none';
+}
+
+// Confirm and remove the post
+async function confirmRemovePost() {
+    try {
+        const response = await fetch(`/delete_post/${postToRemoveId}`, { method: 'DELETE' });
+        if (!response.ok) {
+            const errorData = await response.json();
+            console.error('Error removing post:', errorData.error);
+            return;
+        }
+
+        postsData = postsData.filter(post => post.id !== postToRemoveId);
+        displayPaginatedPosts();
+        closeModal();
+    } catch (error) {
+        console.error('Error deleting post:', error);
+    }
+}
+
+window.onload = fetchPosts; // Fetch posts on page load
+
+</script>
+
+</body>
+</html>

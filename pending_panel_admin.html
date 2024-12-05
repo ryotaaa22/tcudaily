@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pending Posts</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="/css/pending.css">
+    <style>
+        /* Your existing styles remain unchanged */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f6f9;
+        }
+
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 250px;
+            height: 100%;
+            background-color: #4b34c3;
+            padding-top: 20px;
+            color: white;
+        }
+
+        .sidebar h2 {
+            margin-bottom: 40px;
+            text-align: center;
+        }
+
+        .sidebar a {
+            display: flex;
+            align-items: center;
+            padding: 12px 20px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            color: white;
+            font-size: 16px;
+            text-decoration: none;
+        }
+
+        .sidebar a i {
+            margin-right: 10px;
+        }
+
+        .sidebar a:hover {
+            background-color: #c50000;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #fff;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin-left: 250px;
+            width: calc(100% - 250px);
+            position: fixed;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo {
+            font-size: 24px;
+            color: #4b34c3;
+            font-weight: bold;
+        }
+
+        main {
+            padding: 80px 40px 40px 300px;
+            margin-top: 60px;
+        }
+
+        h1 {
+            font-size: 32px;
+            margin-bottom: 20px;
+            color: #d60000;
+        }
+
+        .search-section {
+            margin-bottom: 20px;
+        }
+
+        .search-section input {
+            width: 100%;
+            padding: 10px;
+            border-radius: 10px;
+            border: 1px solid #ddd;
+        }
+
+        table {
+            width: 100%;
+            background-color: white;
+            border-collapse: collapse;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        table th,
+        table td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        table th {
+            background-color: #e20000;
+            color: white;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 10px;
+            color: white;
+            font-weight: bold;
+        }
+
+        /* Status colors */
+        .status.pending {
+            background-color: #ffa000;
+        }
+
+        .status.approved {
+            background-color: #43a047;
+        }
+
+        .status.declined {
+            background-color: #e53935;
+        }
+
+        a {
+            color: #1a73e8;
+            text-decoration: none;
+        }
+
+        button {
+            padding: 8px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.3s ease;
+        }
+
+        button.approve {
+            background-color: #4caf50;
+            color: #fff;
+        }
+
+        button.decline {
+            background-color: #e53935;
+            color: #fff;
+        }
+
+        button.delete {
+            background-color: #e53935;
+            color: #fff;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        button.approve:hover {
+            background-color: #388e3c;
+        }
+
+        button.decline:hover {
+            background-color: #c62828;
+        }
+
+        button.delete:hover {
+            background-color: #c62828;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <h2>TCU Online Pub</h2>
+        <a href="/admin"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+        <a href="/manage_panel_admin"><i class="fas fa-users"></i> Manage Users</a>
+        <a href="/pending_panel_admin"><i class="fas fa-file-alt"></i> Pending Posts</a>
+        <a href="/create_admin"><i class="fas fa-user-plus"></i> Create Admin</a>
+        <a href="/ad_po"><i class="fas fa-pencil-alt"></i> Admin Post News/Announcement</a>
+        <a href="/admin_manage_post"><i class="fas fa-edit"></i> Admin Manage Post</a>
+        <a href="/admin_settings"><i class="fas fa-cogs"></i> Settings</a>
+        <a href="/logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+    </div>
+
+    <!-- Top Bar -->
+    <header>
+        <div class="logo">TCU Online Pub</div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <h1>Pending Posts</h1>
+        <div class="search-section">
+            <input type="text" placeholder="Search posts by title or author">
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Author</th>
+                    <th>Title</th>
+                    <th>Status</th>
+                    <th>Section</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="pendingPosts">
+                <!-- Dynamic content will be populated here -->
+            </tbody>
+        </table>
+    </main>
+
+    <script>
+        // Function to load pending posts with category information
+function loadPendingPosts(category = '') {
+    const url = category ? `/api/pending_posts?category=${category}` : '/api/pending_posts';
+  
+    fetch(url)
+        .then(response => response.json())
+        .then(posts => {
+            const pendingPostsTableBody = document.getElementById("pendingPosts");
+            pendingPostsTableBody.innerHTML = ''; // Clear previous entries
+    
+            posts.forEach(post => {
+                const row = document.createElement("tr");
+    
+                // Author
+                const authorCell = document.createElement("td");
+                authorCell.textContent = post.username || "Anonymous";
+                row.appendChild(authorCell);
+    
+                // Title
+                const titleCell = document.createElement("td");
+                titleCell.textContent = post.title;
+                row.appendChild(titleCell);
+    
+                // Status
+                const statusCell = document.createElement("td");
+                statusCell.className = 'status ' + post.status.toLowerCase();
+                statusCell.textContent = post.status.charAt(0).toUpperCase() + post.status.slice(1);
+                row.appendChild(statusCell);
+    
+                // Section (Category)
+                const sectionCell = document.createElement("td");
+                sectionCell.textContent = post.category || "Uncategorized";  // Display the category
+                row.appendChild(sectionCell);
+    
+                // Actions
+                const actionsCell = document.createElement("td");
+                actionsCell.innerHTML = `
+                    <button class="approve" onclick="approvePost(${post.id}, this)">Approve</button>
+                    <button class="decline" onclick="declinePost(${post.id}, this)">Decline</button>
+                    <button class="delete" onclick="deletePost(${post.id})">Delete</button>
+                `;
+                row.appendChild(actionsCell);
+    
+                pendingPostsTableBody.appendChild(row);
+            });
+        })
+        .catch(error => {
+            console.error("Error loading posts:", error);
+        });
+}
+  
+        // Approve Post Function
+        function approvePost(postId, button) {
+            fetch(`/api/posts/${postId}/approve`, { 
+                method: 'POST', 
+                body: JSON.stringify({ action: 'approve' }), 
+                headers: { 'Content-Type': 'application/json' } 
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    const row = button.closest("tr");
+                    const statusCell = row.querySelector(".status");
+                    statusCell.textContent = "Approved";
+                    statusCell.className = 'status approved';
+                } else {
+                    alert("Error approving post.");
+                }
+            })
+            .catch(error => alert("Error approving post. Please try again."));
+        }
+    
+        // Decline Post Function
+        function declinePost(postId, button) {
+            fetch(`/api/posts/${postId}/approve`, { 
+                method: 'POST', 
+                body: JSON.stringify({ action: 'decline' }), 
+                headers: { 'Content-Type': 'application/json' } 
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    const row = button.closest("tr");
+                    const statusCell = row.querySelector(".status");
+                    statusCell.textContent = "Declined";
+                    statusCell.className = 'status declined';
+                } else {
+                    alert("Error declining post.");
+                }
+            })
+            .catch(error => alert("Error declining post. Please try again."));
+        }
+    
+        // Delete Post Function
+        function deletePost(postId) {
+            fetch(`/api/posts/${postId}`, { method: 'DELETE' })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        loadPendingPosts(); // Reload posts after deletion
+                    } else {
+                        alert("Error deleting post.");
+                    }
+                })
+                .catch(error => alert("Error deleting post. Please try again."));
+        }
+    
+        // Filter Posts by Category
+        function filterCategory() {
+            const category = document.getElementById('filter-category').value;
+            loadPendingPosts(category);  // Re-fetch with category filter
+        }
+    
+        // Initial Load
+        window.onload = loadPendingPosts;
+        
+    </script>    
+    
+</body>
+</html>

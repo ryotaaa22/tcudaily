@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Post News/Announcement</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Your existing styles remain unchanged */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f6f9;
+        }
+        /* Sidebar */
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 250px;
+            height: 100%;
+            background-color: #4b34c3;
+            padding-top: 20px;
+            color: white;
+        }
+        .sidebar h2 {
+            text-align: center;
+            margin-bottom: 40px;
+            font-size: 28px;
+            font-weight: bold;
+            color: #ffffff;
+        }
+        .sidebar a {
+            display: block;
+            padding: 12px 20px;
+            color: white;
+            font-size: 16px;
+            text-decoration: none;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            border-radius: 5px;
+        }
+        .sidebar a i {
+            margin-right: 10px;
+        }
+        .sidebar a:hover {
+            background-color: #c50000;
+        }
+        /* Top Bar */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #fff;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin-left: 250px;
+            width: calc(100% - 250px);
+            position: fixed;
+            top: 0;
+            z-index: 1000;
+        }
+        .logo {
+            font-size: 24px;
+            color: #4b34c3;
+            font-weight: bold;
+        }
+        /* Main Content */
+        main {
+            padding: 80px 40px 40px 300px;
+            flex-grow: 1;
+            margin-top: 60px;
+        }
+        h2 {
+            font-size: 32px;
+            margin-bottom: 20px;
+            color: #000000;
+        }
+        .posting-section {
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .posting-section label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+        .posting-section input, .posting-section textarea, .posting-section select {
+            width: 100%;
+            padding: 10px;
+            border-radius: 10px;
+            border: 1px solid #ddd;
+            margin-bottom: 20px;
+            transition: border-color 0.3s ease;
+        }
+        .posting-section input[type="file"] {
+            display: none; /* Hide the default file input */
+        }
+        .custom-file-upload {
+            display: inline-block;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            cursor: pointer;
+            background-color: #ffffff;
+            text-align: center;
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+        }
+        .custom-file-upload:hover {
+            border-color: #4b34c3; /* Highlight on hover */
+            background-color: #f0f8ff; /* Light background on hover */
+        }
+        .post-btn {
+            background-color: #4CAF50; /* Green */
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .post-btn:hover {
+            background-color: #45A049; /* Darker green on hover */
+        }
+        /* Uploaded file preview */
+        .preview {
+            margin-top: 10px;
+        }
+        .image-preview {
+            max-width: 100%;
+            max-height: 150px;
+            border-radius: 10px;
+            margin-top: 10px;
+        }
+        .video-preview {
+            margin-top: 10px;
+            font-weight: bold;
+            color: #4b34c3;
+        }
+        .image-preview-container {
+            display: flex;
+            flex-wrap: wrap;
+            margin-top: 10px;
+        }
+        .image-preview {
+            width: 100px; /* Adjust width as needed */
+            height: 100px;
+            margin-right: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        .image-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .video-preview {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <h2>TCU Online Pub</h2>
+        <a href="/admin"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+        <a href="/manage_panel_admin"><i class="fas fa-users"></i> Manage Users</a>
+        <a href="/pending_panel_admin"><i class="fas fa-file-alt"></i> Pending Posts</a>
+        <a href="/create_admin"><i class="fas fa-user-plus"></i> Create Admin</a>
+        <a href="/ad_po"><i class="fas fa-pencil-alt"></i> Admin Post News/Announcement</a>
+        <a href="/admin_manage_post"><i class="fas fa-edit"></i> Admin Manage Post</a>
+        <a href="/admin_settings"><i class="fas fa-cogs"></i> Settings</a>
+        <a href="/logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+    </div>
+
+    <!-- Top Bar -->
+    <header>
+        <div class="logo">Post News/Announcement</div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <div class="posting-section">
+            <h2>Create New Post</h2>
+            <form id="postForm" enctype="multipart/form-data">
+                <label for="postTitle">Title:</label>
+                <input type="text" id="postTitle" name="title" placeholder="Enter the post title" required>
+
+                <label for="postContent">Content:</label>
+                <textarea id="postContent" name="content" rows="10" placeholder="Enter the post content" required></textarea>
+
+                <label for="postType">Select Post Type:</label>
+                <select id="postType" name="section" required>
+                    <option value="News/Announcement">News/Announcement</option>
+                    <option value="Articles">Articles</option>
+                    <option value="Journals">Journals</option>
+                </select>
+
+                <label for="imageUpload">Upload Images:</label>
+                <label class="custom-file-upload" for="imageUpload">
+                    Choose Images
+                </label>
+                <input type="file" id="imageUpload" name="images" accept="image/*" multiple onchange="previewImages(event)">
+
+                <div class="image-preview-container" id="imagePreviewContainer"></div>
+
+                <label for="videoUpload">Upload Video:</label>
+                <label class="custom-file-upload" for="videoUpload">
+                    Choose Video
+                </label>
+                <input type="file" id="videoUpload" name="video" accept="video/*" onchange="previewVideo(event)">
+
+                <div class="video-preview" id="videoPreview"></div>
+
+                <button type="submit" class="post-btn">Submit Post</button>
+            </form>
+        </div>
+    </main>
+
+    <script>
+        // Handle form submission
+document.getElementById('postForm').addEventListener('submit', async function(event) {
+    event.preventDefault(); // Prevent default form submission
+
+    const formData = new FormData(this); // Create FormData from the form
+
+    try {
+        const response = await fetch('/api/posts', {
+            method: 'POST',
+            body: formData,
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to submit the post: ' + response.statusText);
+        }
+
+        alert('Post submitted successfully!');
+        location.reload();
+    } catch (error) {
+        console.error(error);
+        alert('Error submitting the post: ' + error.message);
+    }
+});
+
+// Preview images
+function previewImages(event) {
+    const files = event.target.files;
+    const container = document.getElementById('imagePreviewContainer');
+    container.innerHTML = ''; // Clear previous previews
+
+    if (files.length > 0) {
+        for (const file of files) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const img = document.createElement('img');
+                img.src = e.target.result;
+                img.classList.add('image-preview');
+                const div = document.createElement('div');
+                div.classList.add('image-preview');
+                div.appendChild(img);
+                container.appendChild(div);
+            };
+            reader.readAsDataURL(file);
+        }
+    } else {
+        container.innerHTML = 'No image selected.';
+    }
+}
+
+// Preview video
+function previewVideo(event) {
+    const file = event.target.files[0];
+    const container = document.getElementById('videoPreview');
+    container.innerHTML = ''; // Clear previous previews
+
+    if (file) {
+        const videoUrl = URL.createObjectURL(file);
+        const videoElement = document.createElement('video');
+        videoElement.src = videoUrl;
+        videoElement.controls = true;
+        videoElement.classList.add('video-preview');
+        container.appendChild(videoElement);
+    } else {
+        container.innerHTML = 'No video selected.';
+    }
+}
+
+    </script>
+</body>
+</html>

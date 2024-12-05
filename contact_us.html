@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us - TCU Online Publication</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Reset and Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+
+        /* Header Styles */
+        header {
+            background-color: #ff474c;
+            color: rgb(0, 0, 0);
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between; /* Space between elements */
+            align-items: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            position: relative; /* Positioning for the hamburger menu */
+        }
+
+        header h1 {
+            font-size: 1.8em;
+            margin-right: auto; /* Allow the title to push other elements */
+        }
+
+        nav {
+            display: flex;
+            align-items: center; /* Center links and search bar vertically */
+            flex-grow: 1; /* Allow nav to grow and take up space */
+            justify-content: center; /* Center the content within the nav */
+        }
+
+        header nav ul {
+            list-style: none;
+            display: flex;
+            gap: 15px;
+            align-items: center; /* Center links vertically */
+        }
+
+        header nav a {
+            color: rgb(7, 0, 0);
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.3s ease;
+        }
+
+        header nav a:hover {
+            color: #ffd1d1;
+        }
+
+        /* Search Input Styling */
+        .search-container {
+            display: flex;
+            align-items: center; /* Center the search input vertically */
+            margin-left: 20px;
+        }
+
+        .search-container input[type="text"] {
+            padding: 8px;
+            border: 1px solid #fff;
+            border-radius: 20px;
+            outline: none;
+            font-size: 14px;
+            background-color: white;
+            color: #333;
+            transition: border-color 0.3s ease;
+        }
+
+        .search-container input[type="text"]::placeholder {
+            color: #bbb;
+        }
+
+        .search-container input[type="text"]:focus {
+            border-color: #ff474c;
+        }
+
+        /* Hamburger Menu */
+        .lines {
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            position: absolute;
+            right: 20px; /* Position to the right */
+        }
+
+        .line {
+            width: 30px;
+            height: 3px;
+            background-color: white;
+            border-radius: 5px; /* Rounded lines */
+        }
+
+        /* Side Panel Styles */
+        #side-panel {
+            display: none; /* Hidden by default */
+            position: fixed;
+            right: 0;
+            top: 0;
+            width: 250px;
+            height: 100%;
+            background-color: #ff474c;
+            padding: 20px;
+            box-shadow: -3px 0 6px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            color: white;
+            transition: transform 0.3s ease;
+        }
+
+        #side-panel h2 {
+            margin-bottom: 20px;
+            font-size: 1.5em;
+        }
+
+        #side-panel a {
+            color: white;
+            text-decoration: none;
+            font-size: 1.1em;
+            display: block;
+            margin-bottom: 15px;
+            transition: color 0.3s ease;
+        }
+
+        #side-panel a:hover {
+            color: #ffd1d1;
+        }
+
+        .exit-icon {
+            font-size: 1.8em;
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            cursor: pointer;
+        }
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 0 20px;
+        }
+        .section {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+        }
+        .section h2 {
+            font-size: 28px;
+            margin-bottom: 15px;
+            color: #FF4D4D;
+            border-bottom: 2px solid #FF4D4D; /* Underline effect */
+            padding-bottom: 10px;
+        }
+        .section p, .section ul {
+            font-size: 16px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .contact-info {
+            margin-top: 20px;
+        }
+        .contact-info p {
+            margin: 10px 0;
+        }
+        .social-media {
+            margin-top: 20px;
+        }
+        .social-media a {
+            text-decoration: none;
+            margin-right: 15px;
+            color: #3b5998; /* Facebook color */
+            transition: color 0.3s;
+        }
+        .social-media a:hover {
+            color: #0077cc; /* Change color on hover */
+        }
+        .footer {
+            background-color: #FF4D4D;
+            color: white;
+            text-align: center;
+            padding: 20px 0;
+            margin-top: 20px;
+        }
+        .footer p {
+            margin: 5px 0;
+        }
+        /* Map Styles */
+        .map-container {
+            width: 100%;
+            height: 400px;
+            margin-top: 20px;
+        }
+        /* Form Styles */
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+        form label {
+            margin: 10px 0 5px;
+            font-weight: bold;
+        }
+        form input, form textarea {
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            margin-bottom: 15px;
+        }
+        form button {
+            padding: 10px;
+            background-color: #FF4D4D;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        form button:hover {
+            background-color: #e63939; /* Darker shade on hover */
+        }
+        /* Responsive Design */
+        @media screen and (max-width: 768px) {
+            .main-content {
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>TCU Online Publication</h1>
+        <nav>
+            <ul>
+                <li><a href="/us_home">Home</a></li>
+                <li><a href="/us_po">Articles</a></li>
+                <li><a href="/about_us">About Us</a></li>
+                <li><a href="/contact_us">Contact Us</a></li>
+            </ul>
+            <div class="search-container">
+                <input type="text" placeholder="Search..." aria-label="Search input">
+            </div>
+        </nav>
+        <div class="lines" onclick="toggleSidePanel()" aria-label="Toggle menu">
+            <div class="line"></div>
+            <div class="line"></div>
+            <div class="line"></div>
+        </div>
+    </header>
+    
+    <!-- Side Panel -->
+    <div id="side-panel" role="dialog" aria-labelledby="menu-title" aria-hidden="true">
+        <div class="exit-icon" onclick="toggleSidePanel()" aria-label="Close menu">&#10005;</div>
+        <h2 id="menu-title">Menu</h2>
+        <a href="#">Profile</a>
+        <a href="#">Settings</a>
+        <a href="#">Log Out</a>
+    </div>
+    
+    <div class="main-content">
+        <div class="section">
+            <h2>Contact Us</h2>
+            <p>If you have any questions, suggestions, or feedback, we would love to hear from you! Please reach out to us using the contact information below.</p>
+        </div>
+
+        <div class="section contact-info">
+            <h2>Get in Touch</h2>
+            <p><strong>Email:</strong> <a href="mailto:info@tcuonlinepublication.com">info@tcuonlinepublication.com</a></p>
+            <p><strong>Phone:</strong> +63 912 345 6789</p>
+            <p><strong>Address:</strong> Taguig City University, 123 University Ave, Taguig City, Philippines</p>
+        </div>
+
+        <div class="section">
+            <h2>Contact Form</h2>
+            <form action="#" method="post">
+                <label for="name">Name:</label>
+                <input type="text" id="name" name="name" required>
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required>
+                <label for="message">Message:</label>
+                <textarea id="message" name="message" rows="4" required></textarea>
+                <button type="submit">Send Message</button>
+            </form>
+        </div>
+
+        <div class="section">
+            <h2>Follow Us</h2>
+            <p>Stay connected with us on social media:</p>
+            <div class="social-media">
+                <a href="https://facebook.com" target="_blank"><i class="fab fa-facebook"></i> Facebook</a>
+                <a href="https://twitter.com" target="_blank"><i class="fab fa-twitter"></i> Twitter</a>
+                <a href="https://instagram.com" target="_blank"><i class="fab fa-instagram"></i> Instagram</a>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Our Location</h2>
+            <div class="map-container">
+                <iframe 
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1931.4458457640262!2d121.05447963071794!3d14.490906520492567!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3397cf149d091943%3A0xbc9d88bd46e66c90!2sTaguig%20City%20University!5e0!3m2!1sen!2sph!4v1723479624291!5m2!1sen!2sph"
+                    width="100%" 
+                    height="400" 
+                    style="border:0;" 
+                    allowfullscreen="" 
+                    loading="lazy"></iframe>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <p>&copy; 2024 TCU Online Publication. All rights reserved.</p>
+        <p><a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a></p>
+    </footer>
+
+    <script>
+   // Function to toggle the side panel
+   function toggleSidePanel() {
+        const sidePanel = document.getElementById('side-panel');
+        const isVisible = sidePanel.style.display === 'block';
+        sidePanel.style.display = isVisible ? 'none' : 'block'; // Show or hide the side panel
+        sidePanel.setAttribute('aria-hidden', isVisible); // Update accessibility attribute
+    }
+    </script>
+</body>
+</html>

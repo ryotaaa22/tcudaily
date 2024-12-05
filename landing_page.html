@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEWS</title>
+    <link rel="stylesheet" href="/css/landingpage.css">
+    <link rel="stylesheet" href="/css/header.css">
+    <style>
+        /* Global Styles */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #fafafa;
+        }
+    
+        /* Container for content */
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            gap: 30px; /* Adjusted gap for better spacing */
+            padding: 20px;
+        }
+    
+        /* Featured Article Styles */
+        #featured-article {
+            width: 100%;
+            padding: 20px;
+            background-color: #ffffff;
+            margin-bottom: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+    
+        .featured-article h3 {
+            font-size: 1.8em;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #333;
+        }
+    
+        .featured-article img,
+        .featured-article video {
+            width: 100%;
+            border-radius: 5px;
+            margin-top: 15px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+            object-fit: cover;
+        }
+    
+        .featured-article .content {
+            margin-top: 20px;
+            font-size: 1em;
+            line-height: 1.6;
+            color: #555;
+        }
+    
+        /* Side Articles Styles */
+        .side-articles {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); /* Responsive grid for side articles */
+            gap: 20px;
+            justify-content: start;
+        }
+    
+        .side-articles .post {
+            height: auto;
+            background: linear-gradient(135deg, #f0f0f0, #ffffff);
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+    
+        .side-articles .post:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
+        }
+    
+        .side-articles .post img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+    
+        .side-articles .post h3 {
+            font-size: 1.4em;
+            color: #333;
+            margin-bottom: 12px;
+            font-weight: bold;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+    
+        .side-articles .post h6, .side-articles .post p {
+            font-size: 0.95em;
+            color: #777;
+            margin-bottom: 8px;
+        }
+    
+        /* Feed Container */
+        .feed-container {
+            width: 100%;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+    
+        .feed-container h2 {
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            color: #333;
+        }
+    
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+    
+            .side-articles {
+                grid-template-columns: 1fr; /* Stack side articles in one column on small screens */
+            }
+    
+            .side-articles .post {
+                width: 100%; /* Allow full width for side articles on small screens */
+                height: 250px;
+            }
+    
+            #featured-article {
+                height: auto; /* Allow dynamic height for smaller screens */
+            }
+    
+            .feed-container h2 {
+                font-size: 1.5em;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Header -->
+    <div class="header">
+        <div class="logo"></div>
+        <div class="title">Taguig City University Online Pub.</div>
+
+        <!-- Categories -->
+        <div class="categories">
+            <a href="/" class="category-link">News</a>
+            <a href="/sports" class="category-link">Sports</a>
+            <a href="/academic" class="category-link">Academic</a>
+            <a href="/us_po" class="category-link">Announcements</a>
+        </div>
+
+        <input type="text" id="search-bar" placeholder="Search..." class="search-bar">
+    </div>
+
+    <!-- Main Content -->
+<div class="container">
+    <div class="top-stories">
+        <h2>NEWS</h2>
+
+        <!-- Featured Article -->
+        <div id="featured-article" class="featured-article">
+            <!-- Dynamically populated -->
+        </div>
+
+        <!-- Side Articles -->
+        <div id="postFeed" class="side-articles">
+            <!-- Dynamically populated -->
+        </div> <!-- This is the new div where posts will be displayed -->
+    </div>
+
+    <!-- Posts Feed -->
+    <div class="feed-container">
+        <h2>NEWS</h2>
+        <div id="postF"></div> <!-- Another container for posts, if needed -->
+    </div>
+</div>
+
+
+    <!-- JavaScript -->
+    <script>
+        function loadPosts() {
+            fetch('/api/user_posts?status=approved') // Fetch only approved posts
+                .then(response => response.json())
+                .then(posts => {
+                    const featuredArticle = document.getElementById("featured-article");
+                    const sideArticles = document.getElementById("postFeed");
+                    featuredArticle.innerHTML = ''; // Clear previous featured post
+                    sideArticles.innerHTML = ''; // Clear previous side articles
+    
+                    // Filter posts for the "NEWS" section
+                    const newsPosts = posts.filter(post => post.section === 'News');
+    
+                    if (newsPosts.length > 0) {
+                        // Display the first 3 posts as the featured article
+                        const featuredPosts = newsPosts.slice(0, 3);
+                        featuredPosts.forEach(post => {
+                            const featuredDiv = document.createElement("div");
+                            featuredDiv.className = 'post featured-post';
+    
+                            const postTitle = document.createElement('h3');
+                            postTitle.textContent = post.title;
+                            featuredDiv.appendChild(postTitle);
+    
+                            const postUser = document.createElement('h6');
+                            postUser.textContent = "Posted by: " + (post.username || "Anonymous");
+                            featuredDiv.appendChild(postUser);
+    
+                            const postContent = document.createElement('div');
+                            postContent.innerHTML = post.description;
+                            postContent.className = 'content';
+                            featuredDiv.appendChild(postContent);
+    
+                            if (post.file_path) {
+                                const filePaths = post.file_path.split(',');
+                                const images = []; // Store image elements here
+    
+                                filePaths.forEach(path => {
+                                    if (path.endsWith(".mp4") || path.endsWith(".webm")) {
+                                        const vid = document.createElement('video');
+                                        vid.src = path;
+                                        vid.controls = true;
+                                        vid.style.maxWidth = '100%';
+                                        featuredDiv.appendChild(vid);
+                                    } else {
+                                        const img = document.createElement('img');
+                                        img.src = path;
+                                        img.style.maxWidth = '100%';
+                                        images.push(img); // Collect image elements
+                                    }
+                                });
+    
+                                // If there are multiple images, display them side by side
+                                if (images.length > 1) {
+                                    const imageContainer = document.createElement('div');
+                                    imageContainer.style.display = 'flex';
+                                    imageContainer.style.gap = '10px'; // Space between images
+                                    images.forEach(img => {
+                                        img.style.width = '45%';  // Limit width for each image
+                                        imageContainer.appendChild(img);
+                                    });
+                                    featuredDiv.appendChild(imageContainer);
+                                } else {
+                                    // Display single image normally
+                                    images.forEach(img => {
+                                        featuredDiv.appendChild(img);
+                                    });
+                                }
+                            }
+    
+                            const postTimestamp = document.createElement('p');
+                            const formattedDate = new Date(post.created_at).toLocaleString();
+                            postTimestamp.textContent = "Posted on: " + formattedDate;
+                            featuredDiv.appendChild(postTimestamp);
+    
+                            featuredArticle.appendChild(featuredDiv);
+                        });
+    
+                        // Display the next 3 posts as side articles
+                        const sidePosts = newsPosts.slice(2, 9);
+                        sidePosts.forEach(post => {
+                            const postDiv = document.createElement("div");
+                            postDiv.className = 'post';
+    
+                            const postTitle = document.createElement('h3');
+                            postTitle.textContent = post.title;
+                            postDiv.appendChild(postTitle);
+    
+                            const postUser = document.createElement('h6');
+                            postUser.textContent = "Posted by: " + (post.username || "Anonymous");
+                            postDiv.appendChild(postUser);
+    
+                            const postContent = document.createElement('div');
+                            postContent.innerHTML = post.description;
+                            postDiv.appendChild(postContent);
+    
+                            if (post.file_path) {
+                                const filePaths = post.file_path.split(',');
+                                const images = []; // Store image elements here
+    
+                                filePaths.forEach(path => {
+                                    if (path.endsWith(".mp4") || path.endsWith(".webm")) {
+                                        const vid = document.createElement('video');
+                                        vid.src = path;
+                                        vid.controls = true;
+                                        vid.style.maxWidth = '100%';
+                                        postDiv.appendChild(vid);
+                                    } else {
+                                        const img = document.createElement('img');
+                                        img.src = path;
+                                        img.style.maxWidth = '100%';
+                                        images.push(img); // Collect image elements
+                                    }
+                                });
+    
+                                // If there are multiple images, display them side by side
+                                if (images.length > 1) {
+                                    const imageContainer = document.createElement('div');
+                                    imageContainer.style.display = 'flex';
+                                    imageContainer.style.gap = '10px'; // Space between images
+                                    images.forEach(img => {
+                                        img.style.width = '45%';  // Limit width for each image
+                                        imageContainer.appendChild(img);
+                                    });
+                                    postDiv.appendChild(imageContainer);
+                                } else {
+                                    // Display single image normally
+                                    images.forEach(img => {
+                                        postDiv.appendChild(img);
+                                    });
+                                }
+                            }
+    
+                            const postTimestamp = document.createElement('p');
+                            const formattedDate = new Date(post.created_at).toLocaleString();
+                            postTimestamp.textContent = "Posted on: " + formattedDate;
+                            postDiv.appendChild(postTimestamp);
+    
+                            sideArticles.appendChild(postDiv);
+                        });
+                    }
+                })
+                .catch(error => {
+                    console.error("Error loading posts:", error);
+                });
+        }
+
+        let allPosts = []; // Array to store all posts
+
+// Function to load all posts (make sure this is called after fetching the posts)
+function loadPosts() {
+    fetch('/api/user_posts?status=approved') // Adjust the API URL based on your endpoint
+        .then(response => response.json())
+        .then(posts => {
+            allPosts = posts.filter(post => post.section === 'News'); // Filter for 'News' section
+            displayPosts(allPosts); // Display all posts initially
+        })
+        .catch(error => console.error("Error loading posts:", error));
+}
+
+// Function to display posts (this will display the filtered posts as well)
+function displayPosts(posts) {
+    const postFeed = document.getElementById("postFeed"); // The section where posts will be displayed
+    postFeed.innerHTML = ''; // Clear the current content
+
+    posts.forEach(post => {
+        const postDiv = document.createElement("div");
+        postDiv.className = 'post';
+
+        const postTitle = document.createElement('h3');
+        postTitle.textContent = post.title;
+        postDiv.appendChild(postTitle);
+
+        const postDescription = document.createElement('p');
+        postDescription.textContent = post.description;
+        postDiv.appendChild(postDescription);
+
+        postFeed.appendChild(postDiv);
+    });
+}
+
+// Function to handle search input
+document.getElementById('search-bar').addEventListener('input', function(e) {
+    const searchTerm = e.target.value.toLowerCase(); // Get the input value
+    const filteredPosts = allPosts.filter(post => post.title.toLowerCase().includes(searchTerm)); // Filter posts by title
+    displayPosts(filteredPosts); // Display the filtered posts
+});
+
+// Call loadPosts when the page loads to load and display all posts initially
+window.onload = loadPosts;
+        // Call the function to load posts
+        loadPosts();
+    </script>
+    
+</body>
+</html>

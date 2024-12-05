@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile Settings</title>
+    <link rel="stylesheet" href="/css/us_dash.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <aside class="sidebar">
+            <div class="profile-section">
+                <h3 id="user-name">User Name</h3>
+                <p id="user-email">user@example.com</p>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="/us_dash" class="active">Profile</a></li>
+                    <li><a href="/us_settings">Settings</a></li>
+                    <li><a href="/user_posting">Create Post</a></li>
+                    <li><a href="/landing_page">Go to Post</a></li>
+                    <li><a href="/logout">Logout</a></li>
+                </ul>
+                </ul>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <header>
+                <h1>Profile Settings</h1>
+            </header>
+            
+            <section id="settings" class="content-section">
+                <form action="/update_admin_settings" method="POST" class="settings-form">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="username" placeholder="Enter your username">
+                
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" placeholder="Enter your email">
+                
+                    <label for="password">New Password</label>
+                    <input type="password" id="password" name="password" placeholder="Enter new password">
+                
+                    <label for="confirm-password">Confirm Password</label>
+                    <input type="password" id="confirm-password" name="confirm_password" placeholder="Confirm your password">
+                
+                    <button type="submit">Save Changes</button>
+                </form>
+            </section>
+        </main>
+    </div>
+
+    
+    <script>
+
+document.querySelector('form').addEventListener('submit', function(event) {
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirm-password').value;
+            
+            if (password !== confirmPassword) {
+                alert('Passwords do not match!');
+                event.preventDefault();
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+    // Fetch user information and populate the form fields
+    function fetchUserInfo() {
+        fetch('/api/user_info')
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    document.getElementById('name').value = data.user.username;
+                    document.getElementById('email').value = data.user.email;
+                } else {
+                    console.error('Error fetching user info:', data.message);
+                }
+            })
+            .catch(error => console.error('Error:', error));
+    }
+
+    // Update user profile information
+    document.getElementById('settings-form').addEventListener('submit', function (event) {
+        event.preventDefault(); // Prevent form submission
+        
+        const name = document.getElementById('name').value;
+        const email = document.getElementById('email').value;
+
+        fetch('/api/update_user_info', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ name, email }),
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Show confirmation modal
+                document.getElementById('confirmationModal').style.display = 'block';
+                document.querySelector('.close-btn').onclick = function() {
+                    document.getElementById('confirmationModal').style.display = 'none';
+                };
+            } else {
+                console.error('Error updating user info:', data.message);
+            }
+        })
+        .catch(error => console.error('Error:', error));
+    });
+
+    // Call the function to fetch and display user info when the page loads
+    fetchUserInfo();
+});
+
+    </script>
+</body>
+</html>

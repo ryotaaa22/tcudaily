@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SPORTS</title>
+    <link rel="stylesheet" href="/css/landingpage.css">
+    <link rel="stylesheet" href="/css/header.css">
+</head>
+
+<body>
+    <!-- Header -->
+    <div class="header">
+        <div class="logo"></div>
+        <div class="title">Taguig City University Online Pub.</div>
+
+        <!-- Categories -->
+        <div class="categories">
+            <a href="/" class="category-link">News</a>
+            <a href="/sports" class="category-link">Sports</a>
+            <a href="/journal" class="category-link">Journal</a>
+            <a href="/us_po" class="category-link">Announcements</a>
+        </div>
+
+        <input type="text" class="search-bar" placeholder="Search...">
+    </div>
+
+    <!-- Main Content -->
+    <div class="container">
+        <div class="top-stories">
+            <h2>SPORTS</h2>
+
+            <!-- Featured Article -->
+            <div id="featured-article" class="featured-article">
+                <!-- Dynamically populated -->
+            </div>
+
+            <!-- Side Articles -->
+            <div id="side-articles" class="side-articles">
+                <!-- Dynamically populated -->
+            </div>
+        </div>
+
+        <!-- Posts Feed -->
+        <div class="feed-container">
+            <h2>SPORTS</h2>
+            <div id="postFeed"></div>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+        function loadPosts() {
+            fetch('/api/user_posts?status=approved') // Fetch only approved posts
+                .then(response => response.json())
+                .then(posts => {
+                    const postFeed = document.getElementById("postFeed");
+                    postFeed.innerHTML = ''; // Clear previous posts
+
+                    // Filter posts for the "Sports" section
+                    const sportsPosts = posts.filter(post => post.section === 'Sports');
+
+                    // Display filtered posts
+                    sportsPosts.forEach(post => {
+                        const postDiv = document.createElement("div");
+                        postDiv.className = 'post';
+
+                        const postTitle = document.createElement('h4');
+                        postTitle.textContent = post.title;
+                        postDiv.appendChild(postTitle);
+
+                        const postUser = document.createElement('p');
+                        postUser.textContent = "Posted by: " + (post.username || "Anonymous");
+                        postDiv.appendChild(postUser);
+
+                        const postContent = document.createElement('p');
+                        postContent.textContent = post.description;
+                        postDiv.appendChild(postContent);
+
+                        if (post.file_path) {
+                            const filePaths = post.file_path.split(',');
+                            filePaths.forEach(path => {
+                                if (path.endsWith(".mp4") || path.endsWith(".webm")) {
+                                    const vid = document.createElement('video');
+                                    vid.src = path;
+                                    vid.controls = true;
+                                    vid.style.maxWidth = '100%';
+                                    postDiv.appendChild(vid);
+                                } else {
+                                    const img = document.createElement('img');
+                                    img.src = path;
+                                    img.style.maxWidth = '100%';
+                                    postDiv.appendChild(img);
+                                }
+                            });
+                        }
+
+                        const postTimestamp = document.createElement('p');
+                        const formattedDate = new Date(post.created_at).toLocaleString();
+                        postTimestamp.textContent = "Posted on: " + formattedDate;
+                        postDiv.appendChild(postTimestamp);
+
+                        postFeed.appendChild(postDiv);
+                    });
+                })
+                .catch(error => {
+                    console.error("Error loading posts:", error);
+                });
+        }
+
+        // Load posts when the page is ready
+        document.addEventListener('DOMContentLoaded', loadPosts);
+    </script>
+</body>
+</html>

@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create New Admin</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, rgba(255, 71, 76, 1), rgb(0, 45, 194));
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        .logo {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: url('/TCU_logo_2024.png') no-repeat center/cover;
+            margin-bottom: 1em;
+        }
+
+        .title {
+            font-size: 2.1em;
+            font-weight: bold;
+            background: linear-gradient(to right, #181110, #9e1914);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            color: transparent;
+            margin: 0.5em 0;
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: #fff;
+            padding: 2em;
+            border-radius: 12px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+            max-width: 300px;
+            width: 100%;
+            text-align: center;
+            position: relative;
+            animation: fadeIn 0.8s ease;
+        }
+
+        .admin-label {
+            font-size: 1.8em;
+            font-weight: bold;
+            color: rgba(255, 71, 76, 1);
+            margin-bottom: 1em;
+        }
+
+        .input-container {
+            position: relative;
+            width: 100%;
+            margin: 0.5em 0;
+        }
+
+        input[type="text"], 
+        input[type="password"] {
+            width: 100%;
+            padding: 10px 40px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1em;
+            box-sizing: border-box;
+            transition: border-color 0.3s ease;
+        }
+
+        input[type="text"]:focus, 
+        input[type="password"]:focus {
+            border-color: rgba(255, 71, 76, 1);
+            outline: none;
+        }
+
+        .icon {
+            position: absolute;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #ddd;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            background: rgba(255, 71, 76, 1);
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: background 0.3s ease;
+            margin-top: 1em;
+        }
+
+        button:hover {
+            background: rgb(180, 40, 50);
+        }
+
+        a {
+            color: rgba(255, 71, 76, 1);
+            text-decoration: none;
+            margin-top: 1em;
+            font-size: 0.9em;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo"></div>
+        <div class="title">Taguig City University Publication Site</div>
+
+        <form action="/create_admin" method="post">
+            <div class="admin-label">Create New Admin</div>
+
+            <div class="input-container">
+                <i class="fas fa-envelope icon"></i>
+                <input type="text" name="email" placeholder="Email" required />
+            </div>
+
+            <div class="input-container">
+                <i class="fas fa-user icon"></i>
+                <input type="text" name="username" placeholder="Admin Username" required />
+            </div>
+
+            <div class="input-container">
+                <i class="fas fa-lock icon"></i>
+                <input type="password" name="password" placeholder="Admin Password" required />
+            </div>
+
+            <button type="submit">Create Admin</button>
+            <a href="/forgot_password">Forgot Password?</a>
+
+            <p><a href="/admin">Back to Admin Dashboard</a></p>
+        </form>
+    </div>
+</body>
+</html>

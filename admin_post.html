@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Post News/Announcement</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylsheet" href="">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f6f9;
+        }
+        /* Sidebar */
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 250px;
+            height: 100%;
+            background-color: #4b34c3;
+            padding-top: 20px;
+            color: white;
+        }
+        .sidebar h2 {
+            text-align: center;
+            margin-bottom: 40px;
+            font-size: 28px;
+            font-weight: bold;
+            color: #ffffff;
+        }
+        .sidebar a {
+            display: block;
+            padding: 12px 20px;
+            color: white;
+            font-size: 16px;
+            text-decoration: none;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            border-radius: 5px;
+        }
+        .sidebar a i {
+            margin-right: 10px;
+        }
+        .sidebar a:hover {
+            background-color: #c50000;
+        }
+        /* Top Bar */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #fff;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin-left: 250px;
+            width: calc(100% - 250px);
+            position: fixed;
+            top: 0;
+            z-index: 1000;
+        }
+        .logo {
+            font-size: 24px;
+            color: #4b34c3;
+            font-weight: bold;
+        }
+        /* Main Content */
+        main {
+            padding: 80px 40px 40px 300px;
+            flex-grow: 1;
+            margin-top: 60px;
+        }
+        h2 {
+            font-size: 32px;
+            margin-bottom: 20px;
+            color: #000000;
+        }
+        .posting-section {
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .posting-section label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+        .posting-section input, .posting-section textarea, .posting-section select {
+            width: 100%;
+            padding: 10px;
+            border-radius: 10px;
+            border: 1px solid #ddd;
+            margin-bottom: 20px;
+            transition: border-color 0.3s ease;
+        }
+        .posting-section input[type="file"] {
+            display: none; /* Hide the default file input */
+        }
+        .custom-file-upload {
+            display: inline-block;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            cursor: pointer;
+            background-color: #ffffff;
+            text-align: center;
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+        }
+        .custom-file-upload:hover {
+            border-color: #4b34c3; /* Highlight on hover */
+            background-color: #f0f8ff; /* Light background on hover */
+        }
+        .post-btn {
+            background-color: #4CAF50; /* Green */
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .post-btn:hover {
+            background-color: #45A049; /* Darker green on hover */
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <h2>TCU Online Pub</h2>
+        <a href="/admin"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+        <a href="/manage_panel_admin"><i class="fas fa-users"></i> Manage Users</a>
+        <a href="/pending_panel_admin"><i class="fas fa-file-alt"></i> Pending Posts</a>
+        <a href="/create_admin"><i class="fas fa-user-plus"></i> Create Admin</a>
+        <a href="/admin_posting"><i class="fas fa-pencil-alt"></i> Admin Post News/Announcement</a>
+        <a href="/admin_settings"><i class="fas fa-cogs"></i> Settings</a>
+        <a href="/logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+    </div>
+
+    <!-- Top Bar -->
+    <header>
+        <div class="logo">Post News/Announcement</div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <div class="posting-section">
+            <h2>Create New Post</h2>
+            <label for="postTitle">Title:</label>
+            <input type="text" id="postTitle" placeholder="Enter the post title">
+
+            <label for="postContent">Content:</label>
+            <textarea id="postContent" rows="10" placeholder="Enter the post content"></textarea>
+
+            <label for="postType">Select Post Type:</label>
+            <select id="postType">
+                <option value="article">Article</option>
+                <option value="news">News</option>
+                <option value="announcement">Announcement</option>
+            </select>
+
+            <label for="imageUpload">Upload Image:</label>
+            <label class="custom-file-upload" for="imageUpload">
+                Choose Image
+            </label>
+            <input type="file" id="imageUpload" accept="image/*">
+
+            <label for="videoUpload">Upload Video:</label>
+            <label class="custom-file-upload" for="videoUpload">
+                Choose Video
+            </label>
+            <input type="file" id="videoUpload" accept="video/*">
+
+            <button class="post-btn" onclick="submitPost()">Submit Post</button>
+        </div>
+    </main>
+
+    <script>
+        function submitPost() {
+            const title = document.getElementById('postTitle').value;
+            const content = document.getElementById('postContent').value;
+            const type = document.getElementById('postType').value;
+            const imageFile = document.getElementById('imageUpload').files[0];
+            const videoFile = document.getElementById('videoUpload').files[0];
+
+            // Here, you can add your logic to handle the post submission,
+            // such as sending the data to your server using FormData for file uploads.
+
+            const formData = new FormData();
+            formData.append('title', title);
+            formData.append('content', content);
+            formData.append('type', type);
+            if (imageFile) {
+                formData.append('image', imageFile);
+            }
+            if (videoFile) {
+                formData.append('video', videoFile);
+            }
+
+            // Example of sending the data to your server
+            fetch('/upload_post', {
+                method: 'POST',
+                body: formData,
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Post submitted:', data);
+                alert('Post submitted successfully!');
+            })
+            .catch(error => {
+                console.error('Error submitting post:', error);
+                alert('Failed to submit post.');
+            });
+        }
+    </script>
+    
+</body>
+</html>

@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Articles
+    </title>
+    <link rel="stylesheet" href="/css/article-user.css">
+    <!-- Font Awesome CDN for icons -->
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    <header>
+        <h1>TCU Online Publication</h1>
+        <nav>
+            <ul>
+                <li><a href="try1.html">Home</a></li>
+                <li><a href="articles.html">Articles</a></li>
+                <li><a href="aboutus.html">About Us</a></li>
+                <li><a href="contactus.html">Contact</a></li>
+            </ul>
+            <div class="search-container">
+                <input type="text" placeholder="Search..." aria-label="Search input">
+            </div>
+        </nav>
+        <div class="lines" onclick="toggleSidePanel()" aria-label="Toggle menu">
+            <div class="line"></div>
+            <div class="line"></div>
+            <div class="line"></div>
+        </div>
+    </header>
+
+    <!-- Side Panel -->
+    <div id="side-panel" role="dialog" aria-labelledby="menu-title" aria-hidden="true">
+        <div class="exit-icon" onclick="toggleSidePanel()" aria-label="Close menu">&#10005;</div>
+        <h2 id="menu-title">Menu</h2>
+        <a href="#">Profile</a>
+        <a href="#">Settings</a>
+        <a href="#">Log Out</a>
+    </div>
+
+    <div class="wrapper">
+        <!-- Left Container with News/Announcement Title -->
+        <div class="container left-container">
+            <div class="title">News/Announcement</div>
+
+            <!-- Post 1 -->
+            <div class="post">
+                <div class="post-header">
+                    <img src="https://via.placeholder.com/50" alt="Profile Picture" class="profile-pic">
+                    <div>
+                        <span class="username">John Doe</span>
+                        <span class="post-date">October 10, 2024</span>
+                    </div>
+                </div>                     
+                <img src="https://via.placeholder.com/600x350" alt="Post Image" class="post-image">
+
+                <div class="post-content">
+                    <div class="post-title">Upcoming TCU Campus Renovations</div>
+                    <div class="post-preview">
+                        The university is excited to announce a series of renovations across the campus aimed at enhancing student experience and sustainability...
+                    </div>
+                    <div class="post-tags">Tags: #CampusLife #Renovation</div>
+                </div>
+
+                <div class="post-interactions">
+                    <div class="left">
+                        <i class="fa fa-heart"></i>
+                        <i class="fa fa-comment"></i>
+                        <i class="fa fa-share"></i>
+                    </div>
+                    <div class="right">
+                        <i class="fa fa-bookmark"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- You can add more .post divs here as needed -->
+        </div>
+
+        <!-- Right Container with Events Title -->
+        <div class="container right-container">
+            <div class="title">Events</div>
+
+            <!-- Post 1 -->
+            <div class="post">
+                <div class="post-header">
+                    <img src="https://via.placeholder.com/50" alt="Profile Picture" class="profile-pic">
+                    <div>
+                        <span class="username">Jane Smith</span>
+                        <span class="post-date">October 12, 2024</span>
+                    </div>
+                </div>
+
+                <img src="https://via.placeholder.com/600x350" alt="Post Image" class="post-image">
+
+                <div class="post-content">
+                    <div class="post-title">Annual Tech Symposium</div>
+                    <div class="post-preview">
+                        Join us for the Annual Tech Symposium where industry leaders will discuss the latest trends in technology and innovation...
+                    </div>
+                    <div class="post-tags">Tags: #TechEvent #Symposium</div>
+                </div>
+
+                <div class="post-interactions">
+                    <div class="left">
+                        <i class="fa fa-heart"></i>
+                        <i class="fa fa-comment"></i>
+                        <i class="fa fa-share"></i>
+                    </div>
+                    <div class="right">
+                        <i class="fa fa-bookmark"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- You can add more .post divs here as needed -->
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 TCU Online Publication. All Rights Reserved.</p>
+    </footer>
+
+    <script>
+        // Function to toggle the side panel
+        function toggleSidePanel() {
+            const sidePanel = document.getElementById('side-panel');
+            const isVisible = sidePanel.style.display === 'block';
+            sidePanel.style.display = isVisible ? 'none' : 'block'; // Show or hide the side panel
+            sidePanel.setAttribute('aria-hidden', isVisible); // Update accessibility attribute
+        }
+    </script>
+</body>
+</html>

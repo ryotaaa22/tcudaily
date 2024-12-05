@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AboutUS</title>
+   <link rel="stylesheet" href="/css/aboutuss.css">
+</head>
+<header>
+    <h1>TCU Online Publication</h1>
+    <nav>
+        <ul>
+            <li><a href="/us_home">Home</a></li>
+            <li><a href="/us_po">Articles</a></li>
+            <li><a href="/about_us">About Us</a></li>
+            <li><a href="/contact_us">Contact Us</a></li>
+        </ul>
+        <div class="search-container">
+            <input type="text" placeholder="Search..." aria-label="Search input">
+        </div>
+    </nav>
+    <div class="lines" onclick="toggleSidePanel()" aria-label="Toggle menu">
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+    </div>
+</header>
+
+<!-- Side Panel -->
+<div id="side-panel" role="dialog" aria-labelledby="menu-title" aria-hidden="true">
+    <div class="exit-icon" onclick="toggleSidePanel()" aria-label="Close menu">&#10005;</div>
+    <h2 id="menu-title">Menu</h2>
+    <a href="#">Profile</a>
+    <a href="#">Settings</a>
+    <a href="#">Log Out</a>
+</div>
+
+<div class="main-content">
+    <div class="section">
+        <h2>About Us</h2>
+        <p>Welcome to the TCU Online Publication, where we aim to provide up-to-date news and events for the students and community of Taguig City University. Our platform serves as a space for students to stay informed and engaged with what’s happening in their university.</p>
+    </div>
+
+    <div class="section">
+        <h2>Our Mission</h2>
+        <p>Our mission is to create a dynamic online space where the student community can access reliable information, share ideas, and celebrate the achievements of their peers. We strive to uphold transparency, integrity, and inclusivity in all our publications.</p>
+    </div>
+
+    <div class="section">
+        <h2>Our Goals</h2>
+        <p>Our primary goals are to:</p>
+        <ul>
+            <li>Provide timely and accurate news that reflects the interests of the student body.</li>
+            <li>Encourage student participation in content creation to foster a sense of ownership and community.</li>
+            <li>Highlight student achievements and promote academic and extracurricular activities.</li>
+            <li>Serve as a bridge between students and the university administration.</li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h2>Community Engagement</h2>
+        <p>We believe in the power of community engagement. We regularly host events, workshops, and discussions to encourage students to get involved and share their perspectives. Our publication is more than just a source of news; it’s a platform for dialogue and collaboration.</p>
+    </div>
+
+    <div class="section">
+        <h2>Meet the Team</h2>
+        <div class="team-members">
+            <div class="team-member">
+                <h3>Martinez, Jullius</h3>
+                <p>Programmer</p>
+            </div>
+            <div class="team-member">
+                <h3>Tortugo, John Carlo</h3>
+                <p>Programmer</p>
+            </div>
+            <div class="team-member">
+                <h3>Ramizares, Andrew Tito U.</h3>
+                <p>Researcher</p>
+            </div>
+            <div class="team-member">
+                <h3>Balanquit, James Matthew</h3>
+                <p>Researcher</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>Stay Connected</h2>
+        <p>Follow us on our social media platforms to stay updated:</p>
+        <div class="social-media">
+            <a href="https://facebook.com" target="_blank"><i class="fab fa-facebook"></i> Facebook</a>
+            <a href="https://twitter.com" target="_blank"><i class="fab fa-twitter"></i> Twitter</a>
+            <a href="https://instagram.com" target="_blank"><i class="fab fa-instagram"></i> Instagram</a>
+        </div>
+    </div>
+</div>
+
+<footer class="footer">
+    <p>&copy; 2024 TCU Online Publication. All rights reserved.</p>
+    <p><a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a></p>
+</footer>
+
+<script>
+    // Function to toggle the side panel
+    function toggleSidePanel() {
+        const sidePanel = document.getElementById('side-panel');
+        const isVisible = sidePanel.style.display === 'block';
+        sidePanel.style.display = isVisible ? 'none' : 'block'; // Show or hide the side panel
+        sidePanel.setAttribute('aria-hidden', isVisible); // Update accessibility attribute
+    }
+</script>
